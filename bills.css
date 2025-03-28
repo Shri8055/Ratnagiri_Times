@@ -53,29 +53,29 @@ form{
     margin-left: 15px;
 }
 #ac-name{
-    width: 50%;
+    min-width: 48.5%;
 }
 .inner-Sfirst-form{
-    width: 60.6%; 
+    min-width: 60.6%; 
 }
 #cli-name{
     width: 80%;
 }
 #captions{
-    width: 67%;
+    min-width: 64.5%;
 }
 .third-form{
     display: flex;
     justify-content: space-between;
 }
 .inner-Tforth-form > #page-no{
-    width: 20%;
+    min-width: 20%;
 }
 .inner-Tfirst-form{
-    width: 30%;
+    min-width: 30%;
 }
 #r-o-no{
-    width: 75%;
+    min-width: 65%;
 }
 .forth-from{
     display: flex;
@@ -85,7 +85,7 @@ form{
     width: 100%;
 }
 #ed-typ{
-    width: 87%;
+    min-width: 80%;
 }
 select{
     padding: 8px;
@@ -99,7 +99,7 @@ select{
     display: flex;
     justify-content: space-between;
 }
-#col, #col-pos-char, #col-rs, #sq-cms, #col-char, #sq-rs, #tocms, #to-rs, #ins, #les-comm, #ins-rs, #rate, #gross-amt, #gr-rs, #cgst, #sgst, #igst{
+#col, #col-pos-char, #col-rs, #sq-cms, #col-char, #sq-rs, #tocms, #to-rs, #ins, #les-comm, #ins-rs, #rate, #gr-rs, #cgst, #sgst, #igst{
     text-align: end;
     min-width: 40%;
 }
@@ -116,6 +116,56 @@ select{
     background-color: #d4edda;
 }#igst, #igst-rs{
     background-color: #f8d7da;
+}
+#gross-amt{
+    width: 36.5%;
+    text-align: end;
+}
+.innerFosecond-form{
+    width: 80%;
+}
+.innerFosecond-form > select{
+    min-width: 28%;
+}
+.inner-Ffirst-form > label{
+    margin-right: 40px;
+}
+.ax-f1 > label{
+    margin-right: 17px;
+}
+.ax-f2 > label{
+    margin-right: 25px;
+}
+.inner-Tfirst-form > label{
+    margin-right: 31px; 
+}
+.innerFofirst-form > label{
+    margin-right: 41px;
+}
+.innerFifirst-form > label{
+    margin-right: 22px;
+}
+.innerSifirst-form > label{
+    margin-right: 18px;
+}
+.innerSiffirst-form > label{
+    margin-right: 29px;
+}
+.innerSifffirst-form > label{
+    margin-right: 46px;
+}
+.innerSissecond-form > label{
+    margin-left: 40px;
+}
+.innerEffirst-form{
+    width: 30%;
+    position: absolute;
+}
+.innerSiseecond-form > label{
+    margin-right: 15px;
+}
+.innerNfirst-form > label{
+    margin-right: 4px;
 }
 #net-amt{
     text-align: end;
@@ -147,7 +197,7 @@ select{
     min-width: 54.4%;
 }
 #ad-rep{
-    width: 50%;
+    min-width: 50%;
 }
 .buttons {
     display: flex;

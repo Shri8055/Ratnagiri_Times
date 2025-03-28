@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ratnagiti Times | Bills</title>
+    <title>Ratnagiri Times | Bills</title>
     <link rel="stylesheet" href="bills.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,7 +36,7 @@
                 <input id="ac-no" name="ac-no" type="number" value="0">
             </div>
         </div>
-        <div class="aux-form">
+        <div class="aux-form ax-f1">
             <label for="ac-name">A/c Name: </label>
             <input id="ac-name" name="ac-name" type="text" value="">
         </div>
@@ -50,7 +50,7 @@
                 <input id="CmobNo" name="CmobNo" type="number" value="">
             </div>
         </div>
-        <div class="aux-form">
+        <div class="aux-form ax-f2">
             <label for="captions">Captions: </label>
             <input id="captions" name="caption" type="text" value="">
         </div>
@@ -109,7 +109,7 @@
                 <label for="sq-cms">Sq.Cms.:</label>
                 <input id="sq-cms" name="sqcms" type="number" value="0">
             </div>
-            <div class="innerSisecond-form">
+            <div class="innerSissecond-form">
                 <label for="col-char">Color Charges:</label>
                 <input id="col-char" name="col-char" type="number" value="0.00">%
             </div>
@@ -123,20 +123,20 @@
                 <label for="tocms">Total Cms.:</label>
                 <input id="tocms" name="tocms" type="number" value="0">
             </div>
-            <div class="innerSesecond-form">
+            <!-- <div class="innerSesecond-form">
                 <label>Total Amt.:</label>
-            </div>
+            </div> -->
             <div class="innerSethird-form">
-                <label for="to-rs">Rs:</label>
+                <label for="to-rs">Total Amt. Rs:</label>
                 <input id="to-rs" name="tot-col-rs" type="number" value="0.00">
             </div>
         </div>
         <div class="sixth-form">
-            <div class="innerSifirst-form">
+            <div class="innerSiffirst-form">
                 <label for="ins">Inserts:</label>
                 <input id="ins" name="inserts" type="number" value="0">
             </div>
-            <div class="innerSisecond-form">
+            <div class="innerSiseecond-form">
                 <label for="les-comm">Less Commi(%):</label>
                 <input id="les-comm" name="less-comm" type="number" value="0.00">
             </div>
@@ -146,23 +146,26 @@
             </div>
         </div>
         <div class="sixth-form">
-            <div class="innerSifirst-form">
+            <div class="innerSifffirst-form">
                 <label for="rate">Rate:</label>
                 <input id="rate" name="rate" type="number" value="0.00">
             </div>
-            <div class="innerSisecond-form">
-                <label for="gross-amt">Gross Amt.:</label>
-                <input id="gross-amt" name="gross-amt" type="number" value="0.00">%
-            </div>
-            <div class="innerSithird-form">
+            
+            <!-- <div class="innerSithird-form">
                 <label>Amt. Before Tax:</label>
-            </div>
+            </div> -->
             <div class="innerSifourth-form">
-                <label for="gr-rs">Rs:</label>
+                <label for="gr-rs">Amt. Before Tax Rs:</label>
                 <input id="gr-rs" name="gr-rs" type="number" value="0.00">
             </div>
         </div>
         <div class="eight-form">
+            <div class="innerEffirst-form">
+                <div class="innerSisecond-form">
+                    <label for="gross-amt">Gross Amt.:</label>
+                    <input id="gross-amt" name="gross-amt" type="number" value="0.00">%
+                </div>
+            </div>
             <div class="innerEfirst-form">
                 <div class="Efirst-form1">
                     <label for="cgst">CGST : @</label>
