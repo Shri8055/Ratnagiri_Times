@@ -1,0 +1,73 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: "Inter", sans-serif;
+    background-color: #FFE4E1;
+}
+h1{
+    text-align: center;
+    margin: 20px 0;
+    font-size: 2rem;
+}
+form{
+    width: 70%;
+    margin: auto;
+    border: 2px solid rgba(0, 0, 0, 0.331);
+    border-radius: 8px;
+    padding: 20px;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.first-form, .second-form, .fourth-form{
+    display: flex;
+    justify-content: space-between;
+}
+input{
+    font-size: 18px;
+    padding: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.417);
+    border-radius: 5px;
+}
+table{
+    width: 100%;
+    margin: auto;
+}
+#narr, #ac-na-ci{
+    min-width: 215%;
+}
+#r-date, #chq-date{
+    min-width: 76%;
+}
+#r-no, #ac-code, #chq-no{
+    font-weight: bold;
+}
+#curr-bal{
+    background-color: yellow;
+    text-align: end;
+    font-weight: bold;
+    color: red;
+}
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+button {
+    flex: 1;
+    padding: 8px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin: 0 5px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}

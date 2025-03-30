@@ -1,7 +1,7 @@
 *{
     margin: 0;
     padding: 0;
-    background-color: #f5f5f5;
+    background-color: #F5F0FE;
     font-family: "Inter", sans-serif;
     font-size: 16px;
 }
@@ -10,9 +10,11 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-
+#bill-no, #ac-no, #ac-no, #ac-name, #cli-name{
+    font-weight: bold;
+}
 h2{
-    font-size: 1.5rem;
+    font-size: 2rem;
 }
 input{
     padding: 8px;
@@ -118,7 +120,7 @@ select{
     background-color: #f8d7da;
 }
 #gross-amt{
-    width: 36.5%;
+    width: 37.5%;
     text-align: end;
 }
 .innerFosecond-form{
@@ -149,10 +151,16 @@ select{
     margin-right: 18px;
 }
 .innerSiffirst-form > label{
-    margin-right: 29px;
+    margin-right: 32px;
+}
+.innerSiffirst-form > input{
+    min-width: 64%;
 }
 .innerSifffirst-form > label{
-    margin-right: 46px;
+    margin-right: 50px;
+}
+.innerSifffirst-form > input{
+    min-width: 64%;
 }
 .innerSissecond-form > label{
     margin-left: 40px;
@@ -167,17 +175,34 @@ select{
 .innerNfirst-form > label{
     margin-right: 4px;
 }
+.innerSefirst-form > label{
+    margin-right: 3px;
+}
+.innerSefirst-form > input{
+    min-width: 64%;
+}
+.innerSifirst-form > label{
+    margin-right: 21px;
+}
+.innerSifirst-form > input{
+    min-width: 64%;
+}
+.innerFifirst-form > label{
+    margin-right: 25px;
+}
 #net-amt{
     text-align: end;
     min-width: 35%;
     background-color: rgba(252, 62, 62, 0.764);
 }
 #net-in-w{
-    width: 60%;
+    min-width: 70.3%;
     background-color: #a9d4b3;
 }
 #cur-bal-rs{
     background-color: yellow;
+    text-align: end;
+    font-weight: bold;
     color: red;
 }
 .innerSesecond-form, .innerSithird-form{

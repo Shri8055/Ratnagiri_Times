@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ratnagiti Times | Master</title>
+    <title>Ratnagiti Times | MASTER</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -40,7 +40,7 @@
                     <input id="ac-name" name="ac-name" type="text" class="full-width">
 
                     <label for="gstin">GSTIN:</label>
-                    <input id="gstin" name="gstin" type="text">
+                    <input id="gstin" name="gstin" type="text" maxlength="15" style="text-transform: uppercase;">
                 </div>
             </div><br>
 
@@ -51,7 +51,7 @@
 
             <div class="form-section">
                 <div class="third-form-section">
-                    <label for="city">City:</label>
+                    <label class="city" for="city">City:</label>
                     <input id="city" name="city" type="text">
 
                     <label for="p-code">Pin-code:</label>
@@ -70,7 +70,7 @@
                 <input id="state-name" name="state-name" type="text">
                 <div class="inner-sixth-section">
                     <label for="phone">Phone: </label>
-                    <input id="phone" name="phone" type="text">
+                    <input id="phone" name="number" type="text">
                 </div>
             </div><br><hr class="hr1">
 
@@ -108,7 +108,7 @@
                 <label for="opdepo">Op. Deposit:</label>
                 <input id="opdepo" name="opdepo" type="number" class="highlight-yellow" value="0.00">
 
-                <label for="totdep">Total Deposit:</label>
+                <label class="totdep" for="totdep">Total Deposit:</label>
                 <input id="totdep" name="totdep" type="number" class="highlight-green" value="0.00">
 
                 <label for="currbal">Current Balance:</label>
@@ -126,5 +126,13 @@
         </form>
         <p class="footer">Software Developed by: Vyanktesh Computers, Kolhapur, Ph.No.: 7972378977, 9307856854 , E-mail : vyanktesh2001@gmail.com</p>
     </div>
+    <script>
+    function updateCurrentDate() {
+        const now = new Date();
+        const formattedDate = now.toISOString().split("T")[0]; 
+        document.getElementById('date').value = formattedDate;
+    }
+    updateCurrentDate();
+    </script>
 </body>
 </html>

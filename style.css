@@ -1,10 +1,15 @@
 *{
     margin: 0;
     padding: 0;
-    background-color: #f5f5f5;
+    background-color: #EDF6F9;
     font-family: "Inter", sans-serif;
     font-size: 18px;
     color: black;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 form{
     width: 80%;
@@ -34,6 +39,7 @@ body {
 h2 {
     text-align: center;
     margin-bottom: 15px;
+    font-size: 2rem;
 }
 
 form {
@@ -141,10 +147,27 @@ button:hover {
 }
 
 /* Highlight Colors */
-.highlight-blue { background-color: #cce5ff; }
-.highlight-yellow { background-color: #fff3cd; }
-.highlight-green { background-color: #d4edda; }
-.highlight-red { background-color: #f8d7da; }
+.highlight-blue { 
+    background-color: #cce5ff;
+    text-align: end;
+    font-weight: bold;
+}
+.highlight-yellow { 
+    background-color: #fff3cd;
+    text-align: end;
+    font-weight: bold;
+}
+.highlight-green { 
+    background-color: #d4edda;
+    text-align: end;
+    font-weight: bold;
+}
+.highlight-red { 
+    background-color: yellow;
+    text-align: end;
+    font-weight: bold;
+    color: red;
+}
 
 /* Footer */
 .footer {
@@ -166,4 +189,16 @@ button:hover {
 }
 .fifth-form-section, #copi{
     width: 60%;
+}
+.second-form-section > label{
+    margin-right: 21px;
+}
+.third-form-section > .city{
+    margin-right: 40px;
+}
+.form-section > .totdep{
+    margin-right: 10px;
+}
+#ac-no, #ac-name, #gstin{
+    font-weight: bold;
 }

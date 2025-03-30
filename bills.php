@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ratnagiri Times | Bills</title>
+    <title>Ratnagiri Times | BILLS</title>
     <link rel="stylesheet" href="bills.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,7 +15,7 @@
             <p id="current-day"></p>
             <p id="current-date"></p>
         </div>
-        <h2>Bills</h2>
+        <h2>BILLS</h2>
         <div class="time">
             <p>Time:</p>
             <p id="current-time"></p>
@@ -29,7 +29,7 @@
                 <input id="bill-no" name="bill-no" type="number" value="0">
 
                 <label id="bill-datel" for="bill-date">Bill Date:</label>
-                <input id="bill-date" name="bill-date" type="date" value="">
+                <input id="bill-date" name="bill-date" type="date">
             </div>
             <div class="inner-Fsencond-form">
                 <label for="ac-no">A/c No.:</label>
@@ -97,7 +97,7 @@
             </div>
             <div class="innerFisecond-form">
                 <label for="col-pos-char">Sp.Position Charges:</label>
-                <input id="col-pos-char" type="number" name="col-pos-char" value="0.00">%
+                <input id="col-pos-char" type="number" name="col-pos-char" value="0.00"> %
             </div>
             <div class="innerFithird-form">
                 <label for="col-rs">Rs:</label>
@@ -111,7 +111,7 @@
             </div>
             <div class="innerSissecond-form">
                 <label for="col-char">Color Charges:</label>
-                <input id="col-char" name="col-char" type="number" value="0.00">%
+                <input id="col-char" name="col-char" type="number" value="0.00"> %
             </div>
             <div class="innerSithird-form">
                 <label for="sq-rs">Rs:</label>
@@ -163,7 +163,7 @@
             <div class="innerEffirst-form">
                 <div class="innerSisecond-form">
                     <label for="gross-amt">Gross Amt.:</label>
-                    <input id="gross-amt" name="gross-amt" type="number" value="0.00">%
+                    <input id="gross-amt" name="gross-amt" type="number" value="0.00"> %
                 </div>
             </div>
             <div class="innerEfirst-form">
@@ -234,7 +234,7 @@
             </div>
             <div class="innerTthird-form">
                 <label for="cur-bal-rs">Current Bal. Rs.:</label>
-                <input id="cur-bal-rs" name="cur-bal-rs" type="number" value="">Cr.
+                <input id="cur-bal-rs" name="cur-bal-rs" type="number" value="0.00"> Cr.
             </div>
         </div><hr class="second-hr">
         <div class="buttons">
@@ -257,11 +257,18 @@
             const time = now.toLocaleTimeString('en-US', { hour12: false });
             document.getElementById('current-day').textContent = dayName;
             document.getElementById('current-date').textContent = formattedDate;
-            document.getElementById('bill-date').value = now.toISOString().split("T")[0];
-            document.getElementById('r-o-date').value = now.toISOString().split("T")[0];
-            document.getElementById('pub-date').value = now.toISOString().split("T")[0];
-            document.getElementById('du-date').value = now.toISOString().split("T")[0];
             document.getElementById('current-time').textContent = time;
+            let today = now.toISOString().split("T")[0];
+            let billDateInput = document.getElementById('bill-date');
+            if (billDateInput) {
+                billDateInput.value = today;
+                billDateInput.setAttribute("max", today);
+            }
+            let dateFields = ['r-o-date', 'pub-date', 'du-date'];
+            dateFields.forEach(id => {
+                let input = document.getElementById(id);
+                if (input) input.value = today;
+            });
         }
         updateDateTime();
         setInterval(() => {
