@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Poppins:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
     <div class="main">
@@ -239,12 +240,8 @@
         </div><hr class="second-hr">
         <div class="buttons">
             <button type="button">ADD</button>
-            <button type="button">EDIT</button>
-            <button type="button">DELETE</button>
-            <button type="button">DISPLAY</button>
-            <button type="button">FIND</button>
-            <button type="button">PRINT</button>
-            <button type="button">EXIT</button>
+            <button type="button">BILL LIST</button>
+            <button type="button" class="print-logo">PRINT <i class="fa-solid fa-print"></i></button>
         </div>
     </form>
     <p class="footer">Software Developed by: Vyanktesh Computers, Kolhapur, Ph.No.: 7972378977, 9307856854 , E-mail : vyanktesh2001@gmail.com</p>

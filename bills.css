@@ -226,8 +226,10 @@ select{
 }
 .buttons {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     margin-top: 15px;
+    width: 30%;
+    margin: auto;
 }
 button {
     flex: 1;
@@ -255,4 +257,8 @@ button:hover {
 }
 .first-form, .second-form, .aux-form, .third-form, .fifth-form, .sixth-form, .eight-form, .nineth-from{
     margin-bottom: 3px;
+}
+i{
+    background-color: #007bff;
+    color: white;
 }
