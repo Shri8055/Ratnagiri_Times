@@ -4,39 +4,79 @@ $conn = mysqli_connect('localhost', 'root', '', 'pmedia', 4306);
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
-$curr_date = date("Y-m-d");
-if($_SERVER['REQUEST_METHOD']=='POST'){
-    if(isset($_POST['add'])){
-        $ac_open_date=$_POST['date'];
-        $ac_open_date = date("Y-m-d", strtotime($ac_open_date));
-        if ($ac_open_date > $curr_date) {
-            echo "<script>alert('Select today\'s date or a previous date!'); window.history.back();</script>";
-            exit;
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (isset($_POST['add'])) {
+        $ac_open_date = $_POST['date'];
+        $ac_no = $_POST['ac-no'];
+        $category = $_POST['category1'];
+        $ac_name = $_POST['ac-name'];
+        $gstin = strtoupper($_POST['gstin']);
+        $address = $_POST['address'];
+        $city = $_POST['city'];
+        $pin_code = $_POST['p-code'];
+        $district = $_POST['district'];
+        $state_code = $_POST['state-code'];
+        $state_name = $_POST['state-name'];
+        $Ofi_phone = $_POST['ph-no-o'];
+        $Per_phone = $_POST['ph-no-p'];
+        $Wha_phone = $_POST['ph-no-w'];
+        $cgst = $_POST['cgst'];
+        $sgst = $_POST['sgst'];
+        $igst = $_POST['igst'];
+        $free_copies = $_POST['copies'];
+        $copies = $_POST['copi'];
+        $commission = $_POST['comm'];
+        $op_dep = $_POST['opdepo'];
+        $out_lim = $_POST['out_lim'];
+        $out_lim_rs = $_POST['out_lim_rs'];
+        $tot_dep = $_POST['totdep'];
+        $op_bal = $_POST['balance'];
+        $status = $_POST['status'];
+        $cur_bal = $_POST['currbal'];
+
+        $check_sql = "SELECT COUNT(*) FROM ad_mast WHERE ac_no = ? AND ac_name = ?";
+        $check_stmt = mysqli_prepare($conn, $check_sql);
+        mysqli_stmt_bind_param($check_stmt, "ss", $ac_no, $ac_name);
+        mysqli_stmt_execute($check_stmt);
+        mysqli_stmt_bind_result($check_stmt, $count);
+        mysqli_stmt_fetch($check_stmt);
+        mysqli_stmt_close($check_stmt);
+        if ($count > 0) {
+            echo "<script>alert('Error: Account already exists with this A/c No and A/c Name!');</script>";
+        } else {
+            $sql = "INSERT INTO ad_mast 
+            (ac_open_date, ac_no, category, ac_name, gstin, address, city, p_code, district, state_code, state_name, 
+                           ph_no_ofi, ph_no_per, ph_no_wa, cgst, sgst, igst, f_copies, copi, commission, op_dep, out_limt,
+                           out_limt_rs, tot_dep, op_bal, status, cur_bal) 
+            VALUES 
+            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $stmt = mysqli_prepare($conn, $sql);
+
+            if ($stmt) {
+                mysqli_stmt_bind_param(
+                    $stmt,
+                    "sssssssssssssssdddiddsdddsd",
+                    $ac_open_date, $ac_no, $category, $ac_name, $gstin, $address, 
+                    $city, $pin_code, $district, $state_code, $state_name, 
+                    $Ofi_phone, $Per_phone, $Wha_phone,
+                    $cgst, $sgst, $igst,
+                    $free_copies, $copies,
+                    $commission, $op_dep, $out_lim, $out_lim_rs, $tot_dep, $op_bal, 
+                    $status, $cur_bal
+                );
+
+                if (mysqli_stmt_execute($stmt)) {
+                    echo "<script>alert('New record added successfully!');</script>";
+                } else {
+                    echo "<script>alert('Error: " . mysqli_stmt_error($stmt) . "');</script>";
+                }
+
+                mysqli_stmt_close($stmt);
+            } else {
+                echo "<script>alert('Error in preparing statement: " . mysqli_error($conn) . "');</script>";
+            }
         }
-        $ac_no=$_POST['ac-no'];
-        $category=$_POST['category1'];
-        $ac_name=$_POST['ac-name'];
-        $gstin=$_POST['gstin'];
-        $address=$_POST['address'];
-        $city=$_POST['city'];
-        $pin_code=$_POST['p-code'];
-        $district=$_POST['district'];
-        $state_code=$_POST['state-code'];
-        $state_name=$_POST['state-name'];
-        $phone=$_POST['ph-no'];
-        $cgst=$_POST['cgst'];
-        $sgst=$_POST['sgst'];
-        $igst=$_POST['igst'];
-        $free_copies=$_POST['copies'];
-        $copies=$_POST['copi'];
-        $balance=$_POST['balance'];
-        $deposit=$_POST['opdepo'];
-        $tot_deposit=$_POST['totdep'];
-        $current_bal=$_POST['currbal'];
     }
-    echo "<pre>";
-        print_r($_POST);
-    echo "</pre>";
 }
 ?>
 <!DOCTYPE html>
@@ -53,125 +93,338 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 </head>
 <body>
     <div class="container">
-        <h2>Advertisement A/c's Master</h2>
-        <form action="index.php" method="POST">
-            <div class="first-form-section">
-                <label for="date">A/c Opening Date:</label>
-                <input id="date" name="date" type="date">
+        <h1>Advertisement A/c's Master</h1>
+        <form id="form" action="index.php" method="POST">
+            <table>
+                <tr>
+                    <td><label for="date">A/c Opening Date:</label></td>
+                    <td><input id="date" name="date" type="date"></td>
 
-                <label for="ac-no">A/c No.:</label>
-                <input id="ac-no" name="ac-no" type="text" required>
+                    <td><label for="ac-no">A/c No.:</label></td>                
+                    <td><input id="ac-no" name="ac-no" type="text" required></td>                
 
-                <label for="category">Category:</label>
-                <select id="category" name="category1">
-                    <option value="INS Agencies">INS Agencies</option>
-                    <option value="Non-INS Agencies">Non-INS Agencies</option>
-                    <option value="Local Agencies">Local Agencies</option>
-                    <option value="Reporters">Reporters</option>
-                    <option value="Representatives">Representatives</option>
-                    <option value="Office Staff">Office Staff</option>
-                    <option value="Advocate">Advocate</option>
-                    <option value="Others">Others</option>
-                </select>
-            </div><br>
+                    <td><label for="category">Category:</label></td>
+                    <td>
+                        <select id="category" name="category1">
+                            <option value="INS Agencies">INS Agencies</option>
+                            <option value="Non-INS Agencies">Non-INS Agencies</option>
+                            <option value="Local Agencies">Local Agencies</option>
+                            <option value="Reporters">Reporters</option>
+                            <option value="Representatives">Representatives</option>
+                            <option value="Office Staff">Office Staff</option>
+                            <option value="Advocate">Advocate</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="ac-name">A/c Name:</label></td>
+                    <td><input id="ac-name" name="ac-name" type="text" class="full-width" required></td>
 
-            <div class="form-section">
-                <div class="second-form-section">
-                    <label for="ac-name">A/c Name:</label>
-                    <input id="ac-name" name="ac-name" type="text" class="full-width">
+                    <td><label for=""></label></td>
+                    <td><input type="hidden"></td>
 
-                    <label for="gstin">GSTIN:</label>
-                    <input id="gstin" name="gstin" type="text" maxlength="15" style="text-transform: uppercase;">
-                </div>
-            </div><br>
+                    <td><label for="gstin">GSTIN:</label></td>
+                    <td><input id="gstin" name="gstin" type="text" maxlength="15" style="text-transform: uppercase;" required></td>
+                    <span id="gstin-error" style="color: red; font-size: 14px;"></span>
+                    <script>
+                        let gstinInput = document.getElementById("gstin");
+                        let gstinError = document.getElementById("gstin-error");
 
-            <div class="form-section">
-                <label for="address">Address:</label>
-                <input id="address" name="address">
-            </div><br>
+                        gstinInput.addEventListener("input", function() {
+                            this.value = this.value.toUpperCase();
+                        });
 
-            <div class="form-section">
-                <div class="third-form-section">
-                    <label class="city" for="city">City:</label>
-                    <input id="city" name="city" type="text">
+                        gstinInput.addEventListener("blur", function() {
+                            if (this.value.length !== 15) {
+                                gstinError.textContent = " GSTIN number must be 15 chars! ";
+                            } else {
+                                gstinError.textContent = "";
+                            }
+                        });
+                    </script>
+                </tr>
+                <tr>
+                    <td><label for="address">Address:</label></td>
+                    <td><input id="address" name="address"></td>
+                </tr>
+                <tr>
+                    <td><label class="city" for="city">City:</label></td>
+                    <td><input id="city" name="city" type="text" required></td>
+                    <td><label for="p-code">Pin-code:</label></td>
+                    <td><input id="p-code" name="p-code"  type="text" maxlength='6' placeholder="6 digits only" required></td>
+                    <span id="pcode-error" style="color: red; font-size: 14px;"></span>
+                    <script>
+                        let pincodeInput = document.getElementById("p-code");
+                        let errorSpan = document.getElementById("pcode-error");
 
-                    <label for="p-code">Pin-code:</label>
-                    <input id="p-code" name="p-code"  type="text" maxlength='6' placeholder="6 digits only">
+                        pincodeInput.addEventListener("input", function() {
+                            this.value = this.value.replace(/\D/g, "");
+                        });
 
-                    <label for="district">District:</label>
-                    <input id="district" name="district" type="text">
+                        pincodeInput.addEventListener("blur", function() {
+                            if (this.value.length !== 6) {
+                                errorSpan.textContent = " Pin-code must be 6 digits! ";
+                            } else {
+                                errorSpan.textContent = "";
+                            }
+                        });
+                    </script>
+                    <td><label for="district">District:</label></td>
+                    <td><input id="district" name="district" type="text" required></td>
+                </tr>
+                <tr>
+                    <td><label for="state-code">State Code:</label></td>
+                    <td><input id="state-code" name="state-code" maxlength="3" type="text" placeholder="3 Character only"  style="text-transform: uppercase;" required></td>
+                    <td><label for="state-name">State Name: </label></td>
+                    <td><input id="state-name" name="state-name" type="text" required></td>
+                </tr>
+                <tr>
+                    <td><label for="phone">Phone(O)<span style="color: red; font-size: 18px;">*</span>: </label></td>
+                    <td><input id="phone-o" name="ph-no-o" placeholder="10 digits only" type="number" required></td>
+                    <td><label for="phone">Phone(P): </label></td>
+                    <td><input id="phone-p" name="ph-no-p" placeholder="10 digits only" type="number"></td>
+                    <td><label for="phone">Phone(W): </label></td>
+                    <td><input id="phone-w" name="ph-no-w" placeholder="10 digits only" type="number"></td>
+                    <span id="ph-error-o" style="color: red; font-size: 14px;"></span>
+                    <span id="ph-error-p" style="color: red; font-size: 14px;"></span>
+                    <span id="ph-error-w" style="color: red; font-size: 14px;"></span>
+                    <script>
+                        let OphoneInput = document.getElementById("phone-o");
+                        let OpherrorSpan = document.getElementById("ph-error-o");
 
-                    <label for="state-code">State Code:</label>
-                    <input id="state-code" name="state-code" maxlength="3" type="text" placeholder="3 Character only"  style="text-transform: uppercase;">
-                </div>
-            </div><br>
+                        OphoneInput.addEventListener("input", function() {
+                            this.value = this.value.replace(/\D/g, "");
+                        });
 
-            <div class="form-section sixth-section">
-                <label for="state-name">State Name: </label>
-                <input id="state-name" name="state-name" type="text">
-                <div class="inner-sixth-section">
-                    <label for="phone">Phone: </label>
-                    <input id="phone" name="ph-no" maxlength="11" placeholder="11 digits only" type="number">
-                </div>
-            </div><br><hr class="hr1">
+                        OphoneInput.addEventListener("blur", function() {
+                            if (this.value.length !== 10) {
+                                OpherrorSpan.textContent = " Office Phone Number must be 10 digits! ";
+                            } else {
+                                OpherrorSpan.textContent = "";
+                            }
+                        });
+                        let PphoneInput = document.getElementById("phone-p");
+                        let PpherrorSpan = document.getElementById("ph-error-p");
 
-            <div class="form-section">
-                <div class="forth-form-section">
-                    <label for="cgst">CGST:</label>
-                    <input id="cgst" name="cgst" type="number" min="0" step="any" value="0.00">
+                        PphoneInput.addEventListener("input", function() {
+                            this.value = this.value.replace(/\D/g, "");
+                        });
 
-                    <label for="sgst">SGST:</label>
-                    <input id="sgst" name="sgst" type="number" min="0" step="any" value="0.00">
+                        PphoneInput.addEventListener("blur", function() {
+                            if (this.value.length !== 10) {
+                                PpherrorSpan.textContent = " Personal Phone Number must be 10 digits! ";
+                            } else {
+                                PpherrorSpan.textContent = "";
+                            }
+                        });
+                        let WphoneInput = document.getElementById("phone-w");
+                        let WpherrorSpan = document.getElementById("ph-error-w");
 
-                    <label for="igst">IGST:</label>
-                    <input id="igst" name="igst" type="number" min="0" step="any" value="0.00">
-                </div>
-            </div><br>
+                        WphoneInput.addEventListener("input", function() {
+                            this.value = this.value.replace(/\D/g, "");
+                        });
 
-            <div class="form-section">
-                <div class="fifth-form-section">
-                    <label for="cop">Free Copies with Bill:</label>
-                    <select id="cop" name="copies">
-                        <option value="0">0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                    </select>
+                        WphoneInput.addEventListener("blur", function() {
+                            if (this.value.length !== 10) {
+                                WpherrorSpan.textContent = " What's App Number must be 10 digits! ";
+                            } else {
+                                WpherrorSpan.textContent = "";
+                            }
+                        });
+                    </script>
+                </tr>
+                <tr>
+                    <td><label for="cgst">CGST:</label></td>
+                    <td><input id="cgst" name="cgst" type="number" min="0" step="any" value="2.50"></td>
+                    <td><label for="sgst">SGST:</label></td>
+                    <td><input id="sgst" name="sgst" type="number" min="0" step="any" value="2.50"></td>
+                    <td><label for="igst">IGST:</label></td>
+                    <td><input id="igst" name="igst" type="number" min="0" step="any" value="0.00"></td>
+                    <script>
+                        document.getElementById("cgst").addEventListener("input", function() {
+                            let cgstValue = parseFloat(this.value) || 0;
+                            document.getElementById("sgst").value = cgstValue.toFixed(2);
+                            document.getElementById("igst").value = "0.00"; // Set IGST to 0 when CGST/SGST changes
+                        });
 
-                    <label for="copi">Copies:</label>
-                    <input id="copi" name="copi" type="number" value="1">
-                </div>
-            </div><hr class="hr2">
+                        document.getElementById("sgst").addEventListener("input", function() {
+                            let sgstValue = parseFloat(this.value) || 0;
+                            document.getElementById("cgst").value = sgstValue.toFixed(2);
+                            document.getElementById("igst").value = "0.00"; // Set IGST to 0 when CGST/SGST changes
+                        });
 
-            <div class="form-section">
-                <label for="bal">Op. Balance:</label>
-                <input id="bal" name="balance" type="number" min="0" step="any" class="highlight-blue" value="0.00">
+                        document.getElementById("igst").addEventListener("input", function() {
+                            let igstValue = parseFloat(this.value) || 0;
+                            if (igstValue > 0) {
+                                document.getElementById("cgst").value = "0.00";
+                                document.getElementById("sgst").value = "0.00";
+                            }
+                        });
+                        document.querySelector("form").addEventListener("submit", function(event) {
+                            let cgst = parseFloat(document.getElementById("cgst").value) || 0;
+                            let sgst = parseFloat(document.getElementById("sgst").value) || 0;
+                            let igst = parseFloat(document.getElementById("igst").value) || 0;
 
-                <label for="opdepo">Op. Deposit:</label>
-                <input id="opdepo" name="opdepo" type="number" min="0" step="any" class="highlight-yellow" value="0.00">
-
-                <label class="totdep" for="totdep">Total Deposit:</label>
-                <input id="totdep" name="totdep" type="number" min="0" step="any" class="highlight-green" value="0.00">
-
-                <label for="currbal">Current Balance:</label>
-                <input id="currbal" name="currbal" type="none" min="0" step="any" class="highlight-red" value="0.00">
-            </div>
-
+                            if (cgst === 0 && sgst === 0 && igst === 0) {
+                                alert("At least one tax value must be greater than 0.00!");
+                                event.preventDefault(); // Prevent form submission
+                            }
+                        });
+                    </script>
+                </tr>
+                <tr>
+                    <td><label for="copies">Free Copies with Bill:</label></td>
+                    <td><select name="copies" id="copies">
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </td>
+                    <td><label for="copi">Copies:</label></td>
+                    <td><input id="copi" name="copi" type="number" value="1"></td>
+                </tr>
+                <script>
+                    document.getElementById("copies").addEventListener("change", function () {
+                        let copiesInput = document.getElementById("copi");
+                        if (this.value === "No") {
+                            copiesInput.value = 0;
+                            copiesInput.disabled = true;
+                        } else {
+                            copiesInput.value = 1;
+                            copiesInput.disabled = false;
+                        }
+                    });
+                </script>
+                <tr>
+                    <td><label for="comm">Commission(%):</label></td>
+                    <td><input id="comm" name="comm" type="number" value="15.00"></td>
+                    <td><label for=""></label></td>
+                    <td><input type="hidden"></td>
+                    <td><label for="opdepo">Op. Deposit:</label></td>
+                    <td><input id="opdepo" name="opdepo" type="number" min="0" step="any" class="highlight-yellow" value="0.00"></td>
+                </tr>
+                <tr>
+                    <td><label for="out_lim">Outstanding Limitiations: </label></td>
+                    <td><select name="out_lim" id="out_lim">
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </td>
+                    <td><label for="rs">Rs.:</label></td>
+                    <td><input id="rs" type="number" min="0" name="out_lim_rs" value="0.00"></td>
+                    <td><label class="totdep" for="totdep">Total Deposit:</label></td>
+                    <td><input id="totdep" name="totdep" type="number" min="0" step="any" class="highlight-green" value="0.00" readonly></td>
+                </tr>
+                <script>
+                    document.getElementById("out_lim").addEventListener("change", function () {
+                        let rsInput = document.getElementById("rs");
+                        if (this.value === "No") {
+                            rsInput.value = 0.00;
+                            rsInput.disabled = true;
+                        } else {
+                            rsInput.value = 0.00;
+                            rsInput.disabled = false;
+                        }
+                    });
+                </script>
+                <tr>
+                    <td><label for="bal">Op. Balance:</label></td>
+                    <td><input id="bal" name="balance" type="number" min="0" step="any" class="highlight-blue" value="0.00"></td>
+                    <td><label for="stat">Status: </label></td>
+                    <td><select name="status" id="stat">
+                            <option value="Working">Working</option>
+                            <option value="Not-Working">Not-Working</option>
+                            <option value="Temp Closed">Temp Closed</option>
+                            <option value="Blocked">Blocked</option>
+                        </select>
+                    </td>
+                    <td><label for="currbal">Current Balance:</label></td>
+                    <td><input id="currbal" name="currbal" type="text" min="0" step="any" class="highlight-red" value="0.00" readonly></td>
+                </tr>
+            </table><br>
             <div class="buttons">
                 <button type="submit" name="add">ADD</button>
-                <button type="submit">BILL LIST</button>
+                <button type="submit">A/c's LIST</button>
                 <button type="submit">PRINT <i class="fa-solid fa-print"></i></button>
             </div>
         </form>
         <p class="footer">Software Developed by: Vyanktesh Computers, Kolhapur, Ph.No.: 7972378977, 9307856854 , E-mail : vyanktesh2001@gmail.com</p>
     </div>
     <script>
+        document.getElementById("form").addEventListener("submit", function(event) {
+        let gstinInput = document.getElementById("gstin");
+        let gstinError = document.getElementById("gstin-error");
+
+        let pincodeInput = document.getElementById("p-code");
+        let pincodeError = document.getElementById("pcode-error");
+
+        let OphoneInput = document.getElementById("phone-o");
+        let OpherrorSpan = document.getElementById("ph-error-o");
+
+        let PphoneInput = document.getElementById("phone-p");
+        let PpherrorSpan = document.getElementById("ph-error-p");
+
+        let WphoneInput = document.getElementById("phone-w");
+        let WpherrorSpan = document.getElementById("ph-error-w");
+
+        let isValid = true;
+        if (gstinInput.value.length !== 15) {
+            gstinError.textContent = "Must be 15 chars!";
+            isValid = false;
+        } else {
+            gstinError.textContent = "";
+        }
+        if (!/^\d{6}$/.test(pincodeInput.value)) {
+            pincodeError.textContent = "Must be 6 digits!";
+            isValid = false;
+        } else {
+            pincodeError.textContent = "";
+        }
+        if (OphoneInput.value.length !== 10) {
+            OpherrorSpan.textContent = "Office Phone number must be 10 numbers!";
+            isValid = false;
+        } else {
+            OpherrorSpan.textContent = "";
+        }
+        if(PphoneInput.value.length!=''){
+            if (PphoneInput.value.length !== 10) {
+                PpherrorSpan.textContent = "Personal Phone number must be 10 numbers!";
+                isValid = false;
+            }
+        }else {
+            PpherrorSpan.textContent = "";
+        }
+        if(WphoneInput.value.length!=''){
+            if (WphoneInput.value.length !== 10) {
+                WpherrorSpan.textContent = "What's App number be must 10 numbers!";
+                isValid = false;
+            }
+        } else {
+            WpherrorSpan.textContent = "";
+        }
+        if (!isValid) {
+            event.preventDefault();
+        }
+    });
     function updateCurrentDate() {
         const now = new Date();
         const formattedDate = now.toISOString().split("T")[0]; 
-        document.getElementById('date').value = formattedDate;
+        const dateInput = document.getElementById('date');
+        dateInput.value = formattedDate;
+        dateInput.setAttribute("max", formattedDate);
     }
+    document.getElementById('date').addEventListener('change', function() {
+        let selectedDate = new Date(this.value);
+        let today = new Date();
+        today.setHours(0, 0, 0, 0);
+        selectedDate.setHours(0, 0, 0, 0);
+
+        if (selectedDate > today) {
+            alert("You cannot select a future date! Please select today's date or a past date.");
+            updateCurrentDate();
+        }
+    });
     updateCurrentDate();
-    </script>
+</script>
 </body>
 </html>

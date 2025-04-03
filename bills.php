@@ -1,3 +1,15 @@
+<?php
+session_start();
+$conn = mysqli_connect('localhost', 'root', '', 'pmedia', 4306);
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (isset($_POST['add'])) {
+        
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,7 +35,7 @@
         </div>
     </div>
     <hr>
-    <form action="bills.php" method="POST">
+    <form id="form" action="bills.php" method="POST">
         <div class="first-form">
             <div class="inner-Ffirst-form">
                 <label class="bill-no" for="bill-no">Bill No.:</label>
@@ -124,9 +136,6 @@
                 <label for="tocms">Total Cms.:</label>
                 <input id="tocms" name="tocms" type="number" value="0">
             </div>
-            <!-- <div class="innerSesecond-form">
-                <label>Total Amt.:</label>
-            </div> -->
             <div class="innerSethird-form">
                 <label for="to-rs">Total Amt. Rs:</label>
                 <input id="to-rs" name="tot-col-rs" type="number" value="0.00">
@@ -151,10 +160,6 @@
                 <label for="rate">Rate:</label>
                 <input id="rate" name="rate" type="number" value="0.00">
             </div>
-            
-            <!-- <div class="innerSithird-form">
-                <label>Amt. Before Tax:</label>
-            </div> -->
             <div class="innerSifourth-form">
                 <label for="gr-rs">Amt. Before Tax Rs:</label>
                 <input id="gr-rs" name="gr-rs" type="number" value="0.00">
@@ -239,9 +244,9 @@
             </div>
         </div><hr class="second-hr">
         <div class="buttons">
-            <button type="button">ADD</button>
-            <button type="button">BILL LIST</button>
-            <button type="button" class="print-logo">PRINT <i class="fa-solid fa-print"></i></button>
+            <button type="submit" name="add">ADD</button>
+            <button type="submit">BILL LIST</button>
+            <button type="submit" class="print-logo">PRINT <i class="fa-solid fa-print"></i></button>
         </div>
     </form>
     <p class="footer">Software Developed by: Vyanktesh Computers, Kolhapur, Ph.No.: 7972378977, 9307856854 , E-mail : vyanktesh2001@gmail.com</p>

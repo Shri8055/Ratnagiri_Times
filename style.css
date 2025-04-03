@@ -11,6 +11,11 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+h1{
+    font-size: 2rem;
+    text-align: center;
+    padding: 10px 0;
+}
 form{
     width: 80%;
     margin: auto;
@@ -18,119 +23,32 @@ form{
     border: 2px solid rgba(0, 0, 0, 0.331);
     border-radius: 8px;
 }
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-
-.container {
-    padding: 0px;
-    border-radius: 8px;
-}
-
-h2 {
-    text-align: center;
-    margin-bottom: 15px;
-    font-size: 2rem;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-}
-
-.form-section {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 10px;
-}
-.form-section > #state-name, #phone{
-    width: 30%;
-}
-.fifth-form-section > #cop{
-    width: 30%;
-}
-label {
-    display: flex;
-    align-items: center;
-}
-.hr1{
+table{
     width: 100%;
-    border: 2px solid rgba(0, 0, 0, 0.313);
-    margin: -15px 0 10px 0;
+    margin: auto;
 }
-.hr2{
-    width: 100%;
-    border: 2px solid rgba(0, 0, 0, 0.313);
-    margin: 5px 0 10px 0;
+#ac-name{
+    min-width: 210.5%;
+}
+#address{
+    min-width: 210.5%;
 }
 input, select {
-    width: 100%;
+    width: 70%;
     padding: 8px;
     border: 1px solid #2b2b2b79;
     border-radius: 5px;
-    font-size: 14px;
 }
-#bal, #opdepo, #totdep, #currbal{
-    margin-bottom: 5px;
-    width: 37%;
-    font-size: 16px;
+select{
+    width: 70%;
 }
-.first-form-section, 
-.second-form-section, 
-.third-form-section, 
-.forth-form-section, 
-.fifth-form-section {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    gap: 10px;
-}
-.forth-form-section > input{
-    font-size: 16px;
-}
-#address{
-    width: 92%;
-}
-input{
-    font-size: 16px;
-}
-#gstin{
-    width: 30%;
-}
-/* Making inputs flex for proper layout */
-.first-form-section input,
-.third-form-section input,
-.forth-form-section input,
-.fifth-form-section input,
-.first-form-section select {
-    flex: 1;
-}
-
-/* Full width fields */
-.full-width {
-    width: 100%;
-}
-
-/* Buttons */
 .buttons {
     display: flex;
     justify-content: space-between;
     margin-top: 15px;
-    width: 30%;
+    width: 40%;
     margin: auto;
 }
-
 button {
     flex: 1;
     padding: 8px;
@@ -143,12 +61,9 @@ button {
     transition: 0.3s;
     margin: 0 5px;
 }
-
 button:hover {
     background-color: #0056b3;
 }
-
-/* Highlight Colors */
 .highlight-blue { 
     background-color: #cce5ff;
     text-align: end;
@@ -170,36 +85,11 @@ button:hover {
     font-weight: bold;
     color: red;
 }
-
-/* Footer */
 .footer {
     text-align: center;
     font-size: 14px;
     margin-top: 10px;
     color: #555;
-}
-
-.sixth-section , #state-name{
-    display: flex;
-    width: 100%;
-    justify-content: stretch;
-}
-.inner-sixth-section , #phone{
-    display: flex;
-    width: 50%;
-    justify-content: end;
-}
-.fifth-form-section, #copi{
-    width: 60%;
-}
-.second-form-section > label{
-    margin-right: 21px;
-}
-.third-form-section > .city{
-    margin-right: 40px;
-}
-.form-section > .totdep{
-    margin-right: 10px;
 }
 #ac-no, #ac-name, #gstin{
     font-weight: bold;
@@ -208,6 +98,23 @@ i{
     background-color: #007bff;
     color: white;
 }
-#currbal{
+#totdep, #currbal{
     cursor: not-allowed;
+}
+#comm{
+    background-color: rgba(220, 20, 60, 0.772);
+    text-align: end;
+    font-weight: bold;
+    color: white;
+}
+#rs, #cgst, #igst, #sgst{
+    text-align: end;
+    font-weight: bold;
+}
+#out_lim, #rs{
+    background-color: rgba(146, 26, 50, 0.905);
+    color: white;
+}
+td{
+    padding: 5px 0;
 }

@@ -54,6 +54,8 @@ table{
     display: flex;
     justify-content: space-between;
     margin-top: 15px;
+    width: 30%;
+    margin: auto;
 }
 button {
     flex: 1;

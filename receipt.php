@@ -61,84 +61,12 @@
                 <td><label for="curr-bal">Current Bal.:</label></td>
                 <td><input id="curr-bal" name="curr-bal" type="text" value="0.00"></td>
             </tr>
-        </table>
+        </table><br>
         <div class="buttons">
-                <button type="button">ADD</button>
-                <button type="button">EDIT</button>
-                <button type="button">DELETE</button>
-                <button type="button">DISPLAY</button>
-                <button type="button">FIND</button>
-                <button type="button">EXIT</button>
-            </div>
+            <button type="button">ADD</button>
+            <button type="button">Rct LIST</button>
+        </div>
     </form>
-    <!-- <form action="receipt.php" method="POST">
-        <div class="first-form">
-            <div class="Ffirst-form">
-                <label for="r-no">Receipt No.:</label>
-                <input id="r-no" name="r-no" type="text">
-            </div>
-            <div class="Fsecond-form">
-                <label for="r-date">Receipt No.:</label>
-                <input id="r-date" name="r-date" type="date">
-            </div>
-        </div>
-        <div class="second-form">
-            <div class="Sfirst-form">
-                <label for="ac-code">A/c Code:</label>
-                <input id="ac-code" name="ac-code" type="text">
-            </div>
-            <div class="Ssecond-form">
-                <label for="r-amt">Receipt Amt.:</label>
-                <input id="r-amt" name="r-amt" type="number">
-            </div>
-        </div>
-        <div class="third-form">
-            <div class="Tfirst-form">
-                <label for="ac-na-ci">A/c Name & City:</label>
-                <input id="ac-na-ci" name="ac-na-ci" type="text">
-            </div>
-        </div>
-        <div class="fourth-form">
-            <div class="Ffirst-form">
-                <label for="p-type">Payment type:</label>
-                <input id="p-type" name="p-type" type="text">
-            </div>
-            <div class="Fsecond-form">
-                <label for="chk-no">Cheque No.:</label>
-                <input id="chk-no" name="chk-no" type="number">
-            </div>
-            <div class="Fthird-form">
-                <label for="r-amt">Check Date:</label>
-                <input id="r-amt" name="r-amt" type="date">
-            </div>
-        </div>
-        <div class="second-form">
-            <div class="Sfirst-form">
-                <label for="b-name">Bank Name:</label>
-                <input id="b-name" name="b-name" type="text">
-            </div>
-            <div class="Ssecond-form">
-                <label for="b-branch">Bank Branch:</label>
-                <input id="b-branch" name="b-branch" type="number">
-            </div>
-        </div>
-        <div class="third-form">
-            <div class="Tfirst-form">
-                <label for="narr">Narration:</label>
-                <input id="narr" name="narr" type="text">
-            </div>
-        </div>
-        <div class="second-form">
-            <div class="Sfirst-form">
-                <label for="cash-dep-i">Cash Depo.in:</label>
-                <input id="cash-dep-i" name="cash-dep-i" type="text">
-            </div>
-            <div class="Ssecond-form">
-                <label for="cur-bal">Current Bal.:</label>
-                <input id="cur-bal" name="cur-bal" type="number">
-            </div>
-        </div>
-    </form> -->
     <script>
     function updateCurrentDate() {
         const now = new Date();
