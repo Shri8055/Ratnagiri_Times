@@ -23,6 +23,63 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
+    <h1 style="text-align: center;">BILLS</h1>
+    <form id="form" action="bills.php" method="POST">
+    <table>
+        <tr>
+            <td><label for="bill-no">Bill No.:</label></td>
+            <td><input id="bill-no" name="bill-no" type="number" value="0"></td>
+            <td><label for="bill-date">Bill Date:</label></td>
+            <td><input id="bill-date" name="bill-date" type="date"></td>
+            <td><label for="ac-no">A/c No.:</label></td>
+            <td><input id="ac-no" name="ac-no" type="number" value="0"></td>
+        </tr>
+        <tr>
+            <td><label for="ac-name">A/c Name:</label></td>
+            <td><input id="ac-name" name="ac-name" type="text"></td>
+            <td><label for="cli-name">Client Name:</label></td>
+            <td><input id="cli-name" name="cli-name" type="text"></td>
+            <td><label for="CmobNo">Mob No.:</label></td>
+            <td><input id="CmobNo" name="CmobNo" type="number"></td>
+        </tr>
+        <tr>
+            <td><label for="captions">Captions:</label></td>
+            <td colspan="5"><input id="captions" name="caption" type="text"></td>
+        </tr>
+        <tr>
+            <td><label for="r-o-no">R.O. No.:</label></td>
+            <td><input id="r-o-no" name="r-o-no" type="number"></td>
+            <td><label for="r-o-date">R.O. Date:</label></td>
+            <td><input id="r-o-date" name="r-o-date" type="date"></td>
+            <td><label for="pub-date">Pub. Date:</label></td>
+            <td>
+                <input id="pub-date" name="pub-date" type="date">
+                <label for="page-no">Page No.:</label>
+                <input id="page-no" name="pg-no" type="number" value="1" style="width: 50px;">
+            </td>
+        </tr>
+        <tr>
+            <td><label for="ed-typ">Edition:</label></td>
+            <td>
+                <select name="edition" id="ed-typ">
+                    <option value="Local">Local</option>
+                    <option value="National">National</option>
+                    <option value="International">International</option>
+                </select>
+            </td>
+            <td><label for=""></label></td>
+            <td><input type="hidden"></td>
+            <td><label for="ad-typ">Ad. Type:</label></td>
+            <td>
+                <select name="ad-type" id="ad-typ">
+                    <option value="Small">Small</option>
+                    <option value="Large">Large</option>
+                    <option value="Text based">Text Based</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+    </form>
     <div class="main">
         <div class="day">
             <p id="current-day"></p>
@@ -36,71 +93,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
     <hr>
     <form id="form" action="bills.php" method="POST">
-        <div class="first-form">
-            <div class="inner-Ffirst-form">
-                <label class="bill-no" for="bill-no">Bill No.:</label>
-                <input id="bill-no" name="bill-no" type="number" value="0">
-
-                <label id="bill-datel" for="bill-date">Bill Date:</label>
-                <input id="bill-date" name="bill-date" type="date">
-            </div>
-            <div class="inner-Fsencond-form">
-                <label for="ac-no">A/c No.:</label>
-                <input id="ac-no" name="ac-no" type="number" value="0">
-            </div>
-        </div>
-        <div class="aux-form ax-f1">
-            <label for="ac-name">A/c Name: </label>
-            <input id="ac-name" name="ac-name" type="text" value="">
-        </div>
-        <div class="second-form">
-            <div class="inner-Sfirst-form">
-                <label for="cli-name">Client Name:</label>
-                <input id="cli-name" name="cli-name" type="text" value="">
-            </div>
-            <div class="inner-Ssecond-form">
-                <label for="CmobNo">Mob No.:</label>
-                <input id="CmobNo" name="CmobNo" type="number" value="">
-            </div>
-        </div>
-        <div class="aux-form ax-f2">
-            <label for="captions">Captions: </label>
-            <input id="captions" name="caption" type="text" value="">
-        </div>
-        <div class="third-form">
-            <div class="inner-Tfirst-form">
-                <label for="r-o-no">R.O. No.:</label>
-                <input id="r-o-no" name="r-o-no" type="number" value="">
-            </div>
-            <div class="inner-Tsecond-form">
-                <label for="r-o-date">R.O. Date:</label>
-                <input id="r-o-date" name="r-o-date" type="date" value="">
-            </div>
-            <div class="inner-Tsecond-form">
-                <label for="pub-date">Pub. Date:</label>
-                <input id="pub-date" name="pub-date" type="date" value="">
-            </div>
-            <div class="inner-Tforth-form">
-                <label class="page-no" for="page-no">Page No.:</label>
-                <input id="page-no" name="pg-no" type="number" value="1">
-            </div>
-        </div>
+        
         <div class="forth-from">
             <div class="innerFofirst-form">
-                <label for="ed-typ">Edition:</label>
-                <select name="edition" id="ed-typ">
-                    <option value="Local">Local</option>
-                    <option value="National">National</option>
-                    <option value="International">International</option>
-                </select>
+                
+                
             </div>
             <div class="innerFosecond-form">
-                <label for="ad-typ">Ad. Type:</label>
-                <select name="ad-type" id="ad-typ">
-                    <option value="Small">Small</option>
-                    <option value="Large">Large</option>
-                    <option value="Text based">Text Based</option>
-                </select>
+               
+                
             </div>
         </div><hr class="second-hr">
         <div class="fifth-form">

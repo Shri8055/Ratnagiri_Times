@@ -3,16 +3,16 @@
     padding: 0;
     background-color: #F5F0FE;
     font-family: "Inter", sans-serif;
-    font-size: 16px;
 }
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-#bill-no, #ac-no, #ac-no, #ac-name, #cli-name{
+#bill-no, #ac-no, #ac-name, #cli-name{
     font-weight: bold;
 }
+
 h2{
     font-size: 2rem;
 }
@@ -51,20 +51,11 @@ form{
     display: flex;
     justify-content: space-between;
 }
-#bill-datel{
-    margin-left: 15px;
-}
 #ac-name{
     min-width: 48.5%;
 }
 .inner-Sfirst-form{
     min-width: 60.6%; 
-}
-#cli-name{
-    width: 80%;
-}
-#captions{
-    min-width: 64.5%;
 }
 .third-form{
     display: flex;
@@ -75,9 +66,6 @@ form{
 }
 .inner-Tfirst-form{
     min-width: 30%;
-}
-#r-o-no{
-    min-width: 65%;
 }
 .forth-from{
     display: flex;
@@ -261,4 +249,13 @@ button:hover {
 i{
     background-color: #007bff;
     color: white;
+}
+table{
+    width: 100%;
+}
+#CmobNo{
+    width: 53%;
+}
+#page-no{
+    width: 10%;
 }

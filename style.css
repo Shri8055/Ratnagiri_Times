@@ -40,7 +40,7 @@ input, select {
     border-radius: 5px;
 }
 select{
-    width: 70%;
+    width: 75%;
 }
 .buttons {
     display: flex;
