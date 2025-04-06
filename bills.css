@@ -12,7 +12,6 @@ input::-webkit-inner-spin-button {
 #bill-no, #ac-no, #ac-name, #cli-name{
     font-weight: bold;
 }
-
 h2{
     font-size: 2rem;
 }
@@ -20,6 +19,7 @@ input{
     padding: 8px;
     border: 1px solid #2b2b2b79;
     border-radius: 5px;
+    font-size: 16px;
 }
 .main{
     width: 70%;
@@ -27,8 +27,14 @@ input{
     justify-content: space-between;
     margin: auto;
 }
-.day, .time{
+.time{
     padding: 10px;
+    text-align: center;
+    border: 2px solid rgba(0, 0, 0, 0.376);
+    border-radius: 10px;
+}
+.day{
+    padding: 10px 0;
     text-align: center;
     border: 2px solid rgba(0, 0, 0, 0.376);
     border-radius: 10px;
@@ -37,9 +43,6 @@ h2{
     display: flex;
     align-items: center;
 }
-hr{
-    margin-top: 5px;
-}
 form{
     width: 70%;
     margin: auto;
@@ -47,51 +50,13 @@ form{
     border: 2px solid rgba(0, 0, 0, 0.331);
     border-radius: 8px;
 }
-.first-form, .second-form{
-    display: flex;
-    justify-content: space-between;
-}
-#ac-name{
-    min-width: 48.5%;
-}
-.inner-Sfirst-form{
-    min-width: 60.6%; 
-}
-.third-form{
-    display: flex;
-    justify-content: space-between;
-}
-.inner-Tforth-form > #page-no{
-    min-width: 20%;
-}
-.inner-Tfirst-form{
-    min-width: 30%;
-}
-.forth-from{
-    display: flex;
-    justify-content: space-between;
-}
-.innerFofirst-form, .innerFosecond-form{
-    width: 100%;
-}
-#ed-typ{
-    min-width: 80%;
-}
 select{
     padding: 8px;
     border-radius: 5px;
-}
-.second-hr{
-    margin: 10px 0;
-    border: 2px solid rgba(0, 0, 0, 0.235);
-}
-.fifth-form, .sixth-form{
-    display: flex;
-    justify-content: space-between;
+    font-size: 16px;
 }
 #col, #col-pos-char, #col-rs, #sq-cms, #col-char, #sq-rs, #tocms, #to-rs, #ins, #les-comm, #ins-rs, #rate, #gr-rs, #cgst, #sgst, #igst{
     text-align: end;
-    min-width: 40%;
 }
 #cgst-rs, #sgst-rs, #igst-rs{
     text-align: end;
@@ -108,83 +73,14 @@ select{
     background-color: #f8d7da;
 }
 #gross-amt{
-    width: 37.5%;
     text-align: end;
-}
-.innerFosecond-form{
-    width: 80%;
-}
-.innerFosecond-form > select{
-    min-width: 28%;
-}
-.inner-Ffirst-form > label{
-    margin-right: 40px;
-}
-.ax-f1 > label{
-    margin-right: 17px;
-}
-.ax-f2 > label{
-    margin-right: 25px;
-}
-.inner-Tfirst-form > label{
-    margin-right: 31px; 
-}
-.innerFofirst-form > label{
-    margin-right: 41px;
-}
-.innerFifirst-form > label{
-    margin-right: 22px;
-}
-.innerSifirst-form > label{
-    margin-right: 18px;
-}
-.innerSiffirst-form > label{
-    margin-right: 32px;
-}
-.innerSiffirst-form > input{
-    min-width: 64%;
-}
-.innerSifffirst-form > label{
-    margin-right: 50px;
-}
-.innerSifffirst-form > input{
-    min-width: 64%;
-}
-.innerSissecond-form > label{
-    margin-left: 40px;
-}
-.innerEffirst-form{
-    width: 30%;
-    position: absolute;
-}
-.innerSiseecond-form > label{
-    margin-right: 15px;
-}
-.innerNfirst-form > label{
-    margin-right: 4px;
-}
-.innerSefirst-form > label{
-    margin-right: 3px;
-}
-.innerSefirst-form > input{
-    min-width: 64%;
-}
-.innerSifirst-form > label{
-    margin-right: 21px;
-}
-.innerSifirst-form > input{
-    min-width: 64%;
-}
-.innerFifirst-form > label{
-    margin-right: 25px;
 }
 #net-amt{
     text-align: end;
-    min-width: 35%;
     background-color: rgba(252, 62, 62, 0.764);
 }
 #net-in-w{
-    min-width: 70.3%;
+    min-width: 240.3%;
     background-color: #a9d4b3;
 }
 #cur-bal-rs{
@@ -192,22 +88,6 @@ select{
     text-align: end;
     font-weight: bold;
     color: red;
-}
-.innerSesecond-form, .innerSithird-form{
-    display: flex;
-    align-items: center;
-}
-.innerEfirst-form{
-    display: flex;
-    justify-content: end;
-    min-width: 90%;
-}
-.nineth-from, .tenth-from{
-    display: flex;
-    justify-content: space-between;
-}
-.innerNfirst-form{
-    min-width: 54.4%;
 }
 #ad-rep{
     min-width: 50%;
@@ -234,6 +114,9 @@ button {
 .sgst-rs, .cgst-rs, .igst-rs{
     margin-left: 10px;
 }
+.gst{
+    margin-left: 60px;
+}
 button:hover {
     background-color: #0056b3;
 }
@@ -243,9 +126,6 @@ button:hover {
     margin-top: 10px;
     color: #555;
 }
-.first-form, .second-form, .aux-form, .third-form, .fifth-form, .sixth-form, .eight-form, .nineth-from{
-    margin-bottom: 3px;
-}
 i{
     background-color: #007bff;
     color: white;
@@ -253,9 +133,44 @@ i{
 table{
     width: 100%;
 }
-#CmobNo{
-    width: 53%;
+form{
+    padding: 5px 8px;
 }
 #page-no{
-    width: 10%;
+    width: 5px;
+}
+.pg-no{
+    margin-left: 15px;
+}
+td{
+    padding: 1.5px 0;
+}
+#ed-typ{
+    width: 130%;
+}
+#ad-typ{
+    width: 93%;
+}
+#ac-name, #cli-name{
+    width: 240%;
+}
+#captions{
+    width: 89.5%;
+}
+#ad-rep{
+    width: 130%;
+}
+#col-ad{
+    width: 92%;
+}
+#bill-date, #r-o-date{
+    width: 85%;
+}
+#du-date{
+    width: 70%;
+}
+.h2{
+    display: flex;
+    justify-content: center;
+    margin: auto;
 }
