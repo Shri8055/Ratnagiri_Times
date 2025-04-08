@@ -154,6 +154,9 @@ td{
 #ac-name, #cli-name{
     width: 240%;
 }
+#ac-no{
+    text-align: center;
+}
 #captions{
     width: 89.5%;
 }
@@ -173,4 +176,22 @@ td{
     display: flex;
     justify-content: center;
     margin: auto;
+}
+#search-results {
+    position: absolute;
+    border: 1px solid #ccc;
+    z-index: 100;
+    max-height: 150px;
+    overflow-y: auto;
+    margin-top: 20px;
+}
+.search-out{
+    background-color: #72baea;
+    cursor: pointer;
+}
+.out-ac, .out-bal, .out-cit{
+    text-align: center;
+}
+.search-th{
+    background-color: rgba(170, 246, 163, 0.592);
 }

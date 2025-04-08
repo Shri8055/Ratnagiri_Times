@@ -4,6 +4,12 @@ $conn = mysqli_connect('localhost', 'root', '', 'pmedia', 4306);
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
+$ac_no_query = "SELECT MAX(ac_no) AS max_ac_no FROM ad_mast";
+$ac_no_result = $conn->query($ac_no_query);
+$ac_no_row = $ac_no_result->fetch_assoc();
+$ac_no = $ac_no_row['max_ac_no'] + 1;
+if (!$ac_no) $ac_no = 1;
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['add'])) {
         $ac_open_date = $_POST['date'];
@@ -66,7 +72,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 );
 
                 if (mysqli_stmt_execute($stmt)) {
-                    echo "<script>alert('New record added successfully!');</script>";
+                    echo "<script>
+                        alert('New record added successfully!');
+                        window.location.href = 'index.php';
+                    </script>";
                 } else {
                     echo "<script>alert('Error: " . mysqli_stmt_error($stmt) . "');</script>";
                 }
@@ -101,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <td><input id="date" name="date" type="date"></td>
 
                     <td><label for="ac-no">A/c No.:</label></td>                
-                    <td><input id="ac-no" name="ac-no" type="text" required></td>                
+                    <td><input id="ac-no" name="ac-no" type="text" style="text-align: end;" value="<?php echo $ac_no ?>" required readonly></td>                
 
                     <td><label for="category">Category:</label></td>
                     <td>
@@ -125,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <td><input type="hidden"></td>
 
                     <td><label for="gstin">GSTIN:</label></td>
-                    <td><input id="gstin" name="gstin" type="text" maxlength="15" style="text-transform: uppercase;" required></td>
+                    <td><input id="gstin" name="gstin" type="text" min="1" maxlength="15" style="text-transform: uppercase;" required></td>
                     <span id="gstin-error" style="color: red; font-size: 14px;"></span>
                     <script>
                         let gstinInput = document.getElementById("gstin");

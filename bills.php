@@ -8,46 +8,49 @@ $ed=$conn->query("SELECT * FROM ed");
 $ad=$conn->query("SELECT * FROM ad");
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['add'])) {
-        $bill_no;
-        $bill_date;
-        $ac_no;
-        $ac_name;
-        $cli_name;
-        $mob_no;
-        $cap;
-        $r_o_no;
-        $r_o_date;
-        $pub_date;
-        $page;
-        $ed_type;
-        $ad_type;
-        $column;
-        $sp_pos_char;
-        $sp_pos_rs;
-        $sq_cm;
-        $colr_char;
-        $colr_char_rs;
-        $tot_cm;
-        $tot_amt;
-        $inserts;
-        $less_com;
-        $less_com_rs;
-        $rate;
-        $amt_bef_tax;
-        $gross_amt;
-        $cgst;
-        $cgst_rs;
-        $sgst;
-        $sgst_rs;
-        $igst;
-        $igst_rs;
-        $ad_rep;
-        $net_amt;
-        $net_amt_w;
-        $due_date_bill;
-        $color_ad;
-        $curr_bal;
+        $bill_no=$_POST['bill-no'];
+        $bill_date=$_POST['bill-date'];
+        $ac_no=$_POST['ac-no'];
+        $ac_name=$_POST['ac-name'];
+        $cli_name=$_POST['cli-name'];
+        $mob_no=$_POST['CmobNo'];
+        $cap=$_POST['caption'];
+        $r_o_no=$_POST['r-o-no'];
+        $r_o_date=$_POST['r-o-date'];
+        $pub_date=$_POST['pub-date'];
+        $page=$_POST['pg-no'];
+        $ed_type=$_POST['edition'];
+        $ad_type=$_POST['ad-type'];
+        $column=$_POST['col'];
+        $sp_pos_char=$_POST['col-pos-char'];
+        $sp_pos_rs=$_POST['col-rs'];
+        $sq_cm=$_POST['sqcms'];
+        $colr_char=$_POST['col-char'];
+        $colr_char_rs=$_POST['sq-col-rs'];
+        $tot_cm=$_POST['tocms'];
+        $tot_amt=$_POST['tot-col-rs'];
+        $inserts=$_POST['inserts'];
+        $less_com=$_POST['less-comm'];
+        $less_com_rs=$_POST['ins-rs'];
+        $rate=$_POST['rate'];
+        $amt_bef_tax=$_POST['gr-rs'];
+        $gross_amt=$_POST['gross-amt'];
+        $cgst=$_POST['cgst'];
+        $cgst_rs=$_POST['cgst-rs'];
+        $sgst=$_POST['sgst'];
+        $sgst_rs=$_POST['sgst-rs'];
+        $igst=$_POST['igst'];
+        $igst_rs=$_POST['igst-rs'];
+        $ad_rep=$_POST['adbyrep'];
+        $net_amt=$_POST['net-amt-rs'];
+        $net_amt_w=$_POST['netinw'];
+        $due_date_bill=$_POST['du-date'];
+        $color_ad=$_POST['col-ad'];
+        $curr_bal=$_POST['cur-bal-rs'];
     }
+    echo "<pre>";
+        print_r($_POST);
+    echo "</pre>";
 }
 ?>
 <!DOCTYPE html>
@@ -80,15 +83,130 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <table>
         <tr>
             <td><label for="bill-no">Bill No.:</label></td>
-            <td><input id="bill-no" name="bill-no" type="number" value="0"></td>
+            <td><input id="bill-no" name="bill-no" type="number" value="0" readonly></td>
             <td><label for="bill-date">Bill Date:</label></td>
             <td><input id="bill-date" name="bill-date" type="date"></td>
             <td><label for="ac-no">A/c No.:</label></td>
-            <td><input id="ac-no" name="ac-no" type="number" value="0" readonly></td>
+            <td><input id="ac-no" name="ac-no" type="text" value="0" readonly></td>
         </tr>
         <tr>
             <td><label for="ac-name">A/c Name:</label></td>
-            <td><input id="ac-name" name="ac-name" type="text"></td>
+                <td>
+                    <input id="ac-name" name="ac-name" type="text" autocomplete="off" oninput="searchAccount(this.value)">
+                    <div id="search-results" style="position:absolute; z-index:1000; background-color: lightgreen; border:1px solid #ccc; width:40%; max-height: 250px; overflow-y:auto; display:none;">
+                        <table id="results-table" border="1px" style="width:100%; background:white; border-collapse:collapse;">
+                            <thead style="background:#bc2222;">
+                                <tr>
+                                    <th class="search-th" style="padding:5px;">A/c No</th>
+                                    <th class="search-th" style="padding:5px;">Name</th>
+                                    <th class="search-th" style="padding:5px;">Balance</th>
+                                    <th class="search-th" style="padding:5px;">City</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+
+                    <script>
+                        let selectedIndex = -1;
+                        let currentData = [];
+
+                        const acNameInput = document.getElementById('ac-name');
+                        const resultsBox = document.getElementById('search-results');
+                        const tbody = document.querySelector('#results-table tbody');
+
+                        acNameInput.addEventListener('input', function () {
+                            const term = this.value;
+                            selectedIndex = -1;
+
+                            if (term.length < 1) {
+                                tbody.innerHTML = '';
+                                resultsBox.style.display = 'none';
+                                currentData = [];
+                                return;
+                            }
+
+                            fetch(`search_account.php?query=${encodeURIComponent(term)}`)
+                                .then(res => res.json())
+                                .then(data => {
+                                    currentData = data;
+                                    tbody.innerHTML = '';
+
+                                    if (data.length === 0) {
+                                        const noRow = document.createElement('tr');
+                                        noRow.innerHTML = `<td colspan="3" style="text-align:center; color: crimson;">No result found</td>`;
+                                        tbody.appendChild(noRow);
+                                    } else {
+                                        data.forEach((item, index) => {
+                                            const row = document.createElement('tr');
+                                            row.tabIndex = 0;
+                                            row.dataset.index = index;
+                                            row.innerHTML = `
+                                                <td class="search-out out-ac" style="padding:5px;">${item.ac_no}</td>
+                                                <td class="search-out" style="padding:5px;">${item.ac_name}</td>
+                                                <td class="search-out out-bal" style="padding:5px;">${parseFloat(item.cur_bal).toFixed(2)}</td>
+                                                <td class="search-out out-cit" style="padding:5px;">${item.city}</td>
+                                            `;
+                                            row.addEventListener('click', () => fillAccount(item));
+                                            row.addEventListener('keydown', (e) => {
+                                                if (e.key === "Enter") {
+                                                    fillAccount(item);
+                                                }
+                                            });
+                                            tbody.appendChild(row);
+                                        });
+                                    }
+
+                                    resultsBox.style.display = 'block';
+                                });
+                        });
+
+                        acNameInput.addEventListener('keydown', function (e) {
+                            const rows = document.querySelectorAll('#results-table tbody tr');
+
+                            if (!rows.length || currentData.length === 0) return;
+
+                            if (e.key === 'ArrowDown') {
+                                e.preventDefault();
+                                selectedIndex = (selectedIndex + 1) % currentData.length;
+                                highlight(rows);
+                                rows[selectedIndex].focus();
+                            } else if (e.key === 'ArrowUp') {
+                                e.preventDefault();
+                                selectedIndex = (selectedIndex - 1 + currentData.length) % currentData.length;
+                                highlight(rows);
+                                rows[selectedIndex].focus();
+                            } else if (e.key === 'Enter') {
+                                e.preventDefault();
+                                if (selectedIndex === -1 && currentData.length > 0) {
+                                    fillAccount(currentData[0]);
+                                } else if (selectedIndex >= 0 && selectedIndex < currentData.length) {
+                                    fillAccount(currentData[selectedIndex]);
+                                }
+                            }
+                        });
+
+                        function highlight(rows) {
+                            rows.forEach((row, i) => {
+                                row.style.background = i === selectedIndex ? '#cce5ff' : '';
+                            });
+                        }
+
+                        function fillAccount(account) {
+                            document.getElementById('ac-no').value = account.ac_no;
+                            document.getElementById('ac-name').value = account.ac_name;
+                            document.getElementById('cur-bal-rs').value = parseFloat(account.cur_bal).toFixed(2);
+                            resultsBox.style.display = 'none';
+                            selectedIndex = -1;
+                        }
+
+                        document.addEventListener('click', function (e) {
+                            if (!resultsBox.contains(e.target) && e.target.id !== 'ac-name') {
+                                resultsBox.style.display = 'none';
+                            }
+                        });
+                    </script>
+                </td>
         </tr>
         <tr>
             <td><label for="cli-name">Client Name:</label></td>
@@ -97,6 +215,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <td><input type="hidden"></td>
             <td><label for="CmobNo">Mob No.:</label></td>
             <td><input id="CmobNo" name="CmobNo" type="number"></td>
+            <span id="mob-no-error" style="color: red; font-size: 14px;"></span>
+            <script>
+                let mobInput = document.getElementById("CmobNo");
+                let mobError = document.getElementById("mob-no-error")
+                mobInput.addEventListener("blur", function() {
+                    if (this.value.length !== 10) {
+                        mobError.textContent = " Mobile number must be 10 digit! ";
+                    } else {
+                        mobError.textContent = "";
+                    }
+                });
+            </script>
         </tr>
         <tr>
             <td><label for="captions">Captions:</label></td>
@@ -111,7 +241,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <td>
                 <input id="pub-date" name="pub-date" type="date">
                 <label for="page-no" class="pg-no">Page No.:</label>
-                <input id="page-no" name="pg-no" type="number" value="1" style="width: 50px;">
+                <input id="page-no" name="pg-no" type="number" min="1" value="1" style="width: 50px;">
             </td>
         </tr>
         <tr>
@@ -144,7 +274,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </tr>
         <tr>
             <td><label for="col">Column:</label></td>
-            <td><input id="col" name="col" type="number" value="1"></td>
+            <td><input id="col" name="col" type="number" min="1" value="1"></td>
             <td><label for="col-pos-char">Sp.Pos Charges(%):</label></td>
             <td><input id="col-pos-char" type="number" name="col-pos-char" value="0.00"></td>
             <td><label for="col-rs">Rs:</label></td>
@@ -168,7 +298,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </tr>
         <tr>
             <td><label for="ins">Inserts:</label></td>
-            <td><input id="ins" name="inserts" type="number" value="0"></td>
+            <td><input id="ins" name="inserts" type="number" value="1"></td>
             <td><label for="les-comm">Less Commi(%):</label></td>
             <td><input id="les-comm" name="less-comm" type="number" value="0.00"></td>
             <td><label for="ins-rs">Rs:</label></td>
@@ -184,12 +314,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </tr>
         <tr>
             <td><label for="gross-amt">Gross Amt.:</label></td>
-            <td><input id="gross-amt" name="gross-amt" type="number" value="0.00"> %</td>
+            <td><input id="gross-amt" name="gross-amt" type="number" value="0.00"></td>
             <td><label class="gst" for="cgst">CGST : @</label></td>
             <td><input id="cgst" name="cgst" type="number" value="0.00"></td>
             <td><label class="cgst-rs" for="cgst-rs">Rs: </label></td>
             <td><input id="cgst-rs" name="cgst-rs" type="number" value="0.00"></td>
         </tr>
+        <script>
+            function calculateGrossAmount() {
+                const col = parseFloat(document.getElementById('col').value) || 0;
+                const sqCms = parseFloat(document.getElementById('sq-cms').value) || 0;
+                const rate = parseFloat(document.getElementById('rate').value) || 0;
+                const inserts = parseFloat(document.getElementById('ins').value) || 0;
+                const totalCms = col * sqCms;
+                const grossAmt = totalCms * rate * inserts;
+                document.getElementById('tocms').value = totalCms.toFixed(2);
+                document.getElementById('gross-amt').value = grossAmt.toFixed(2);
+            }
+            document.getElementById('col').addEventListener('input', calculateGrossAmount);
+            document.getElementById('sq-cms').addEventListener('input', calculateGrossAmount);
+            document.getElementById('rate').addEventListener('input', calculateGrossAmount);
+            document.getElementById('ins').addEventListener('input', calculateGrossAmount);
+        </script>
         <tr>
             <td><label for=""></label></td>
             <td><input type="hidden"></td>
@@ -210,9 +356,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <td><label for="ad-rep">Ad. by Repre:</label></td>
             <td>
                 <select name="adbyrep" id="ad-rep">
-                    <option value="Local">Local</option>
-                    <option value="National">National</option>
-                    <option value="International">International</option>
+                    <option value="-">-</option>
+                    <option value="Reporters">Reporters</option>
+                    <option value="Representative">Representative</option>
+                    <option value="Office Staff">Office Staff</option>
                 </select>
             </td>
             <td><label for=""></label></td>
@@ -235,7 +382,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </select>
             </td>
             <td><label for="cur-bal-rs">Current Bal. Rs.:</label></td>
-            <td><input id="cur-bal-rs" name="cur-bal-rs" type="number" value="0.00"> Cr.</td>
+            <td><input id="cur-bal-rs" name="cur-bal-rs" type="decimal" value="0.00" readonly> Cr.</td>
         </tr>
     </table>
         <div class="buttons">
@@ -246,6 +393,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </form>
     <p class="footer">Software Developed by: Vyanktesh Computers, Kolhapur, Ph.No.: 7972378977, 9307856854 , E-mail : vyanktesh2001@gmail.com</p>
     <script>
+        function calculateTotalCms() {
+            const col = parseFloat(document.getElementById('col').value) || 0;
+            const sqCms = parseFloat(document.getElementById('sq-cms').value) || 0;
+            const total = col * sqCms;
+            document.getElementById('tocms').value = total.toFixed(2);
+            document.getElementById('gross-amt').value = gr_amt.toFixed(2);
+        }
+        document.getElementById('col').addEventListener('input', calculateTotalCms);
+        document.getElementById('sq-cms').addEventListener('input', calculateTotalCms);
+
+        document.getElementById("form").addEventListener("submit", function(event) {
+        let mobInput = document.getElementById("CmobNo");
+        let mobError = document.getElementById("mob-no-error");
+        let isValid = true;
+        if(mobInput.value.length!=''){
+            if (mobInput.value.length !== 10) {
+                mobError.textContent = " Phone number must be 10 digit!";
+                isValid = false;
+            }
+        }else {
+            mobError.textContent = "";
+        }
+        if (!isValid) {
+            event.preventDefault();
+        }
+    });
         function updateDateTime() {
             const now = new Date();
             const options = { weekday: 'long' };
