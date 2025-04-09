@@ -83,16 +83,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <table>
         <tr>
             <td><label for="bill-no">Bill No.:</label></td>
-            <td><input id="bill-no" name="bill-no" type="number" value="0" readonly></td>
+            <td><input id="bill-no" name="bill-no" type="number" value="0" style="text-align: center;" readonly></td>
             <td><label for="bill-date">Bill Date:</label></td>
-            <td><input id="bill-date" name="bill-date" type="date"></td>
+            <td><input id="bill-date" name="bill-date" type="date" tabindex="1"></td>
             <td><label for="ac-no">A/c No.:</label></td>
             <td><input id="ac-no" name="ac-no" type="text" value="0" readonly></td>
         </tr>
         <tr>
             <td><label for="ac-name">A/c Name:</label></td>
                 <td>
-                    <input id="ac-name" name="ac-name" type="text" autocomplete="off" oninput="searchAccount(this.value)">
+                    <input id="ac-name" name="ac-name" type="text" autocomplete="off" oninput="searchAccount(this.value)"  tabindex="2">
                     <div id="search-results" style="position:absolute; z-index:1000; background-color: lightgreen; border:1px solid #ccc; width:40%; max-height: 250px; overflow-y:auto; display:none;">
                         <table id="results-table" border="1px" style="width:100%; background:white; border-collapse:collapse;">
                             <thead style="background:#bc2222;">
@@ -196,6 +196,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             document.getElementById('ac-no').value = account.ac_no;
                             document.getElementById('ac-name').value = account.ac_name;
                             document.getElementById('cur-bal-rs').value = parseFloat(account.cur_bal).toFixed(2);
+                            document.getElementById('les-comm').value = parseFloat(account.commission).toFixed(2);
                             resultsBox.style.display = 'none';
                             selectedIndex = -1;
                         }
@@ -210,11 +211,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </tr>
         <tr>
             <td><label for="cli-name">Client Name:</label></td>
-            <td><input id="cli-name" name="cli-name" type="text"></td>
+            <td><input id="cli-name" name="cli-name" type="text" tabindex="3"></td>
             <td><label for=""></label></td>
             <td><input type="hidden"></td>
             <td><label for="CmobNo">Mob No.:</label></td>
-            <td><input id="CmobNo" name="CmobNo" type="number"></td>
+            <td><input id="CmobNo" name="CmobNo" type="number" tabindex="4"></td>
             <span id="mob-no-error" style="color: red; font-size: 14px;"></span>
             <script>
                 let mobInput = document.getElementById("CmobNo");
@@ -230,24 +231,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </tr>
         <tr>
             <td><label for="captions">Captions:</label></td>
-            <td colspan="5"><input id="captions" name="caption" type="text"></td>
+            <td colspan="5"><input id="captions" name="caption" type="text" tabindex="5"></td>
         </tr>
         <tr>
             <td><label for="r-o-no">R.O. No.:</label></td>
-            <td><input id="r-o-no" name="r-o-no" type="number"></td>
+            <td><input id="r-o-no" name="r-o-no" type="number" tabindex="6"></td>
             <td><label for="r-o-date">R.O. Date:</label></td>
-            <td><input id="r-o-date" name="r-o-date" type="date"></td>
+            <td><input id="r-o-date" name="r-o-date" type="date" tabindex="7"></td>
             <td class="pub_date_td"><label for="pub-date">Pub. Date:</label></td>
             <td>
-                <input id="pub-date" name="pub-date" type="date">
+                <input id="pub-date" name="pub-date" type="date" tabindex="8">
                 <label for="page-no" class="pg-no">Page No.:</label>
-                <input id="page-no" name="pg-no" type="number" min="1" value="1" style="width: 50px;">
+                <input id="page-no" name="pg-no" type="number" min="1" value="1" style="width: 50px;" tabindex="9">
             </td>
         </tr>
         <tr>
             <td><label for="ed-typ">Edition:</label></td>
             <td class="ed_typ">
-                <select name="edition" id="ed-typ">
+                <select name="edition" id="ed-typ" tabindex="10">
                 <?php while ($row = $ed->fetch_assoc()) { ?>
                     <option value="<?php echo $row['ed_nmae']; ?>"><?php echo $row['ed_nmae']; ?></option>
                 <?php } ?>
@@ -257,7 +258,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <td><input type="hidden"></td>
             <td class="ad_typ"><label for="ad-typ">Ad. Type:</label></td>
             <td>
-                <select name="ad-type" id="ad-typ">
+                <select name="ad-type" id="ad-typ" tabindex="11">
                     <?php while ($row = $ad->fetch_assoc()) { ?>
                         <option value="<?php echo $row['ad_nmae']; ?>"><?php echo $row['ad_nmae']; ?></option>
                     <?php } ?>
@@ -274,23 +275,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </tr>
         <tr>
             <td><label for="col">Column:</label></td>
-            <td><input id="col" name="col" type="number" min="1" value="1"></td>
+            <td><input id="col" name="col" type="number" min="1" max="8" value="1" tabindex="12"></td>
             <td><label for="col-pos-char">Sp.Pos Charges(%):</label></td>
-            <td><input id="col-pos-char" type="number" name="col-pos-char" value="0.00"></td>
+            <td><input id="col-pos-char" type="number" name="col-pos-char" value="0.00" tabindex="17"></td>
             <td><label for="col-rs">Rs:</label></td>
             <td><input id="col-rs" name="col-rs" type="number" value="0.00"></td>
         </tr>
         <tr>
             <td><label for="sq-cms">Sq.Cms.:</label></td>
-            <td><input id="sq-cms" name="sqcms" type="number" value="0"></td>
+            <td><input id="sq-cms" name="sqcms" type="number" value="0" tabindex="13"></td>
             <td><label for="col-char">Color Charges(%):</label></td>
-            <td><input id="col-char" name="col-char" type="number" value="0.00"></td>
+            <td><input id="col-char" name="col-char" type="number" value="0.00" tabindex="18"></td>
             <td><label for="sq-rs">Rs:</label></td>
             <td><input id="sq-rs" name="sq-col-rs" type="number" value="0.00"></td>
         </tr>
         <tr>
             <td><label for="tocms">Total Cms.:</label></td>
-            <td><input id="tocms" name="tocms" type="number" value="0"></td>
+            <td><input id="tocms" name="tocms" type="number" value="0" tabindex="14" readonly></td>
             <td><label for=""></label></td>
             <td><input type="hidden"></td>
             <td><label for="to-rs">Total Amt. Rs:</label></td>
@@ -298,15 +299,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </tr>
         <tr>
             <td><label for="ins">Inserts:</label></td>
-            <td><input id="ins" name="inserts" type="number" value="1"></td>
+            <td><input id="ins" name="inserts" type="number" value="1"  tabindex="15"></td>
             <td><label for="les-comm">Less Commi(%):</label></td>
-            <td><input id="les-comm" name="less-comm" type="number" value="0.00"></td>
+            <td><input id="les-comm" name="less-comm" type="number" min="0" max="100" value="0.00" tabindex="19"></td>
             <td><label for="ins-rs">Rs:</label></td>
             <td><input id="ins-rs" name="ins-rs" type="number" value="0.00"></td>
         </tr>
         <tr>
             <td><label for="rate">Rate:</label></td>
-            <td><input id="rate" name="rate" type="number" value="0.00"></td>
+            <td><input id="rate" name="rate" type="number" value="0.00" tabindex="16"></td>
             <td><label for=""></label></td>
             <td><input type="hidden"></td>
             <td><label for="gr-rs">Amt. Bef Tax Rs:</label></td>
@@ -316,31 +317,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <td><label for="gross-amt">Gross Amt.:</label></td>
             <td><input id="gross-amt" name="gross-amt" type="number" value="0.00"></td>
             <td><label class="gst" for="cgst">CGST : @</label></td>
-            <td><input id="cgst" name="cgst" type="number" value="0.00"></td>
+            <td><input id="cgst" name="cgst" type="number" value="2.50" tabindex="20"></td>
             <td><label class="cgst-rs" for="cgst-rs">Rs: </label></td>
             <td><input id="cgst-rs" name="cgst-rs" type="number" value="0.00"></td>
         </tr>
-        <script>
-            function calculateGrossAmount() {
-                const col = parseFloat(document.getElementById('col').value) || 0;
-                const sqCms = parseFloat(document.getElementById('sq-cms').value) || 0;
-                const rate = parseFloat(document.getElementById('rate').value) || 0;
-                const inserts = parseFloat(document.getElementById('ins').value) || 0;
-                const totalCms = col * sqCms;
-                const grossAmt = totalCms * rate * inserts;
-                document.getElementById('tocms').value = totalCms.toFixed(2);
-                document.getElementById('gross-amt').value = grossAmt.toFixed(2);
-            }
-            document.getElementById('col').addEventListener('input', calculateGrossAmount);
-            document.getElementById('sq-cms').addEventListener('input', calculateGrossAmount);
-            document.getElementById('rate').addEventListener('input', calculateGrossAmount);
-            document.getElementById('ins').addEventListener('input', calculateGrossAmount);
-        </script>
         <tr>
             <td><label for=""></label></td>
             <td><input type="hidden"></td>
             <td><label class="gst" for="sgst">SGST : @</label></td>
-            <td><input id="sgst" name="sgst" type="number" value="0.00"></td>
+            <td><input id="sgst" name="sgst" type="number" value="2.50" tabindex="21"></td>
             <td><label class="sgst-rs" for="sgst-rs">Rs: </label></td>
             <td><input id="sgst-rs" name="sgst-rs" type="number" value="0.00"></td>
         </tr>
@@ -348,14 +333,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <td><label for=""></label></td>
             <td><input type="hidden"></td>
             <td><label class="gst" for="igst">IGST : @</label></td>
-            <td><input id="igst" name="igst" type="number" value="0.00"></td>
+            <td><input id="igst" name="igst" type="number" value="0.00" tabindex="22"></td>
             <td><label class="igst-rs" for="igst-rs">Rs: </label></td>
             <td><input id="igst-rs" name="igst-rs" type="number" value="0.00"></td>
         </tr>
         <tr>
             <td><label for="ad-rep">Ad. by Repre:</label></td>
             <td>
-                <select name="adbyrep" id="ad-rep">
+                <select name="adbyrep" id="ad-rep" tabindex="23">
                     <option value="-">-</option>
                     <option value="Reporters">Reporters</option>
                     <option value="Representative">Representative</option>
@@ -365,7 +350,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <td><label for=""></label></td>
             <td><input type="hidden"></td>
             <td><label for="net-amt">NET AMT Rs.:</label></td>
-            <td><input id="net-amt" name="net-amt-rs" type="number" value="0.00"></td>
+            <td><input id="net-amt" name="net-amt-rs" type="number" value="0.00" readonly></td>
         </tr>
         <tr>
             <td><label for="net-in-w">NET in words: </label></td>
@@ -373,10 +358,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </tr>
         <tr>
             <td><label for="du-date">Due date of this bill:</label></td>
-            <td><input id="du-date" name="du-date" type="date"></td>
+            <td><input id="du-date" name="du-date" type="date" tabindex="24"></td>
             <td><label for="col-ad">Color Ad.:</label></td>
             <td>
-                <select name="col-ad" id="col-ad">
+                <select name="col-ad" id="col-ad" tabindex="25">
                     <option value="Yes">Yes</option>
                     <option value="No">No</option>
                 </select>
@@ -384,11 +369,108 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <td><label for="cur-bal-rs">Current Bal. Rs.:</label></td>
             <td><input id="cur-bal-rs" name="cur-bal-rs" type="decimal" value="0.00" readonly> Cr.</td>
         </tr>
+        <script>
+            function toWords(num) {
+                const a = [
+                    '', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven',
+                    'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen',
+                    'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'
+                ];
+                const b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+
+                if ((num = num.toString()).length > 9) return 'Overflow';
+                let n = ('000000000' + num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+                if (!n) return; let str = '';
+                str += (n[1] != 0) ? (a[Number(n[1])] || b[n[1][0]] + ' ' + a[n[1][1]]) + ' Crore ' : '';
+                str += (n[2] != 0) ? (a[Number(n[2])] || b[n[2][0]] + ' ' + a[n[2][1]]) + ' Lakh ' : '';
+                str += (n[3] != 0) ? (a[Number(n[3])] || b[n[3][0]] + ' ' + a[n[3][1]]) + ' Thousand ' : '';
+                str += (n[4] != 0) ? (a[Number(n[4])] || b[n[4][0]] + ' ' + a[n[4][1]]) + ' Hundred ' : '';
+                str += (n[5] != 0) ? ((str != '') ? 'and ' : '') +
+                    (a[Number(n[5])] || b[n[5][0]] + ' ' + a[n[5][1]]) + ' ' : '';
+                return str + 'Rupees Only';
+            }
+
+            function updateAll() {
+                const gross = parseFloat(document.getElementById('gross-amt').value) || 0;
+                const spPerc = parseFloat(document.getElementById('col-pos-char').value) || 0;
+                const colorPerc = parseFloat(document.getElementById('col-char').value) || 0;
+                const commPerc = parseFloat(document.getElementById('les-comm').value) || 0;
+                
+                const colRs = (gross * spPerc) / 100;
+                const sqRs = (gross * colorPerc) / 100;
+                const totalAmt = gross + colRs + sqRs;
+                const commRs = (totalAmt * commPerc) / 100;
+                const beforeTax = totalAmt - commRs;
+
+                document.getElementById('col-rs').value = colRs.toFixed(2);
+                document.getElementById('sq-rs').value = sqRs.toFixed(2);
+                document.getElementById('to-rs').value = totalAmt.toFixed(2);
+                document.getElementById('ins-rs').value = commRs.toFixed(2);
+                document.getElementById('gr-rs').value = beforeTax.toFixed(2);
+
+                let cgstPerc = parseFloat(document.getElementById('cgst').value) || 0;
+                let sgstPerc = parseFloat(document.getElementById('sgst').value) || 0;
+                let igstPerc = parseFloat(document.getElementById('igst').value) || 0;
+
+                // If IGST is used, reset CGST/SGST
+                if (igstPerc > 0) {
+                    cgstPerc = 0;
+                    sgstPerc = 0;
+                    document.getElementById('cgst').value = "0.00";
+                    document.getElementById('sgst').value = "0.00";
+                } else {
+                    igstPerc = 0;
+                    document.getElementById('igst').value = "0.00";
+                }
+
+                const cgstRs = (beforeTax * cgstPerc) / 100;
+                const sgstRs = (beforeTax * sgstPerc) / 100;
+                const igstRs = (beforeTax * igstPerc) / 100;
+
+                document.getElementById('cgst-rs').value = cgstRs.toFixed(2);
+                document.getElementById('sgst-rs').value = sgstRs.toFixed(2);
+                document.getElementById('igst-rs').value = igstRs.toFixed(2);
+
+                const netAmt = beforeTax + cgstRs + sgstRs + igstRs;
+                document.getElementById('net-amt').value = netAmt.toFixed(2);
+                document.getElementById('net-in-w').value = toWords(Math.round(netAmt));
+            }
+
+            // Sync CGST <-> SGST and handle IGST override
+            document.getElementById('cgst').addEventListener('input', function () {
+                if (parseFloat(this.value) > 0) {
+                    document.getElementById('sgst').value = this.value;
+                    document.getElementById('igst').value = "0.00";
+                }
+                updateAll();
+            });
+
+            document.getElementById('sgst').addEventListener('input', function () {
+                if (parseFloat(this.value) > 0) {
+                    document.getElementById('cgst').value = this.value;
+                    document.getElementById('igst').value = "0.00";
+                }
+                updateAll();
+            });
+
+            document.getElementById('igst').addEventListener('input', function () {
+                if (parseFloat(this.value) > 0) {
+                    document.getElementById('cgst').value = "0.00";
+                    document.getElementById('sgst').value = "0.00";
+                }
+                updateAll();
+            });
+
+            // Main listeners
+            ['gross-amt', 'col-pos-char', 'col-char', 'les-comm'].forEach(id => {
+                document.getElementById(id).addEventListener('input', updateAll);
+            });
+        </script>
     </table>
         <div class="buttons">
-            <button type="submit" name="add">ADD</button>
-            <button type="submit">BILL LIST</button>
-            <button type="submit" class="print-logo">PRINT <i class="fa-solid fa-print"></i></button>
+            <button type="submit" name="add" tabindex="26">ADD</button>
+            <button type="submit" tabindex="27">BILL LIST</button>
+            <button type="submit" tabindex="28" class="print-logo">PRINT <i class="fa-solid fa-print"></i></button>
         </div>
     </form>
     <p class="footer">Software Developed by: Vyanktesh Computers, Kolhapur, Ph.No.: 7972378977, 9307856854 , E-mail : vyanktesh2001@gmail.com</p>
@@ -402,6 +484,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
         document.getElementById('col').addEventListener('input', calculateTotalCms);
         document.getElementById('sq-cms').addEventListener('input', calculateTotalCms);
+        
+        function calculateGrossAmount() {
+            const col = parseFloat(document.getElementById('col').value) || 0;
+            const sqCms = parseFloat(document.getElementById('sq-cms').value) || 0;
+            const rate = parseFloat(document.getElementById('rate').value) || 0;
+            const inserts = parseFloat(document.getElementById('ins').value) || 0;
+            const totalCms = col * sqCms;
+            const grossAmt = totalCms * rate * inserts;
+            document.getElementById('tocms').value = totalCms.toFixed(2);
+            document.getElementById('gross-amt').value = grossAmt.toFixed(2);
+        }
+        document.getElementById('col').addEventListener('input', calculateGrossAmount);
+        document.getElementById('sq-cms').addEventListener('input', calculateGrossAmount);
+        document.getElementById('rate').addEventListener('input', calculateGrossAmount);
+        document.getElementById('ins').addEventListener('input', calculateGrossAmount);
 
         document.getElementById("form").addEventListener("submit", function(event) {
         let mobInput = document.getElementById("CmobNo");

@@ -77,6 +77,7 @@ select{
 }
 #net-amt{
     text-align: end;
+    font-weight: bold;
     background-color: rgba(252, 62, 62, 0.764);
 }
 #net-in-w{
@@ -152,7 +153,7 @@ td{
     width: 93%;
 }
 #ac-name, #cli-name{
-    width: 240%;
+    width: 248%;
 }
 #ac-no{
     text-align: center;
@@ -194,4 +195,8 @@ td{
 }
 .search-th{
     background-color: rgba(170, 246, 163, 0.592);
+}
+#les-comm{
+    background-color: rgba(220, 20, 60, 0.789);
+    color: white;
 }

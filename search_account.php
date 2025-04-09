@@ -7,7 +7,7 @@ if (!$conn) {
 $term = $_GET['query'] ?? '';
 $term = mysqli_real_escape_string($conn, $term);
 
-$sql = "SELECT ac_no, ac_name, cur_bal, city FROM ad_mast WHERE ac_name LIKE '%$term%' LIMIT 10";
+$sql = "SELECT ac_no, ac_name, cur_bal, city, commission FROM ad_mast WHERE ac_name LIKE '%$term%' LIMIT 10";
 
 $result = mysqli_query($conn, $sql);
 
