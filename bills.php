@@ -66,6 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
+    <a class="main-a" href="home.php" style="position: absolute; margin: 10px 0"><button>Home</button></a>
     <div class="main">
         <div class="day">
             <p id="current-day"></p>
@@ -412,7 +413,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 let sgstPerc = parseFloat(document.getElementById('sgst').value) || 0;
                 let igstPerc = parseFloat(document.getElementById('igst').value) || 0;
 
-                // If IGST is used, reset CGST/SGST
                 if (igstPerc > 0) {
                     cgstPerc = 0;
                     sgstPerc = 0;
@@ -436,7 +436,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 document.getElementById('net-in-w').value = toWords(Math.round(netAmt));
             }
 
-            // Sync CGST <-> SGST and handle IGST override
             document.getElementById('cgst').addEventListener('input', function () {
                 if (parseFloat(this.value) > 0) {
                     document.getElementById('sgst').value = this.value;
@@ -460,8 +459,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
                 updateAll();
             });
-
-            // Main listeners
             ['gross-amt', 'col-pos-char', 'col-char', 'les-comm'].forEach(id => {
                 document.getElementById(id).addEventListener('input', updateAll);
             });
@@ -475,6 +472,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </form>
     <p class="footer">Software Developed by: Vyanktesh Computers, Kolhapur, Ph.No.: 7972378977, 9307856854 , E-mail : vyanktesh2001@gmail.com</p>
     <script>
+        document.addEventListener('keydown', function (e) {
+        if (e.key === 'Tab') {
+            const tabbable = Array.from(document.querySelectorAll('[tabindex]'))
+                .filter(el => !el.disabled && el.tabIndex > 0)
+                .sort((a, b) => a.tabIndex - b.tabIndex);
+
+            const focused = document.activeElement;
+            const currentIndex = tabbable.indexOf(focused);
+
+            if (e.shiftKey) {
+                if (currentIndex === 0) {
+                    e.preventDefault();
+                    tabbable[tabbable.length - 1].focus();
+                }
+            } else {
+                if (currentIndex === tabbable.length - 1) {
+                    e.preventDefault();
+                    tabbable[0].focus();
+                }
+            }
+        }
+    });
         function calculateTotalCms() {
             const col = parseFloat(document.getElementById('col').value) || 0;
             const sqCms = parseFloat(document.getElementById('sq-cms').value) || 0;

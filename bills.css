@@ -81,7 +81,7 @@ select{
     background-color: rgba(252, 62, 62, 0.764);
 }
 #net-in-w{
-    min-width: 240.3%;
+    min-width: 248.3%;
     background-color: #a9d4b3;
 }
 #cur-bal-rs{
@@ -199,4 +199,7 @@ td{
 #les-comm{
     background-color: rgba(220, 20, 60, 0.789);
     color: white;
+}
+#les-comm, #col{
+    width: 82%;
 }

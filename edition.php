@@ -47,6 +47,7 @@ $editions = $conn->query("SELECT * FROM ed");
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 <body>
+<a class="main-a" href="home.php" style="position: absolute; margin: 10px 0"><button class="btn-a">Home</button></a>
     <div class="container">
         <h1 style="text-align: center;">EDITION MASTER</h1>
         <form action="edition.php" method="POST">

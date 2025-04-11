@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Poppins:wght@100..900&display=swap" rel="stylesheet">
 </head>
 <body>
+<a class="main-a" href="home.php" style="position: absolute; margin: 10px 0"><button class="btn-a">Home</button></a>
     <h1>RECEIPTS</h1><hr>
     <form action="receipt.php" method="POST">
         <table>
