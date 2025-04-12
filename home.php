@@ -10,6 +10,23 @@
     <link rel="stylesheet" href="home.css">
 </head>
 <body>
+    <div class="main">
+        <div class="head-l">
+            <p>© Softline Softwares, Kolhapur</p>
+            <p>Ph No. : 7972378977, 9307856854</p>
+            <p>E-mail : softlinesoftwares2001@gmail.com</p>
+        </div>
+        <div class="head">
+            <h2 class="head-h2-1">RATNAGIRI TIMES</h2>
+            <p class="head-p">H.O : Times Bhavan, Maruti lane, Ratnagiri</p>
+            <h2 class="head-h2-2">Advertisement Section</h2>
+        </div>
+        <div class="head-r">
+            <p class="time-p">Softline® Ver: v1.0</p>
+            <p class="time-p">Release : (7a)</p>
+            <p class="time-p">Valid upto : 31-Dec-2025</p>
+        </div>
+    </div>
 <div class="navbar">
     <div class="dropdown">
       <button>Master</button>
@@ -35,7 +52,7 @@
       <button>Reports</button>
       <div class="dropdown-content">
         <div class="has-submenu">
-          <a href="#">Billing <span>↦</span></a><hr>
+          <a href="#">Billing <span class="arw">↦</span></a><hr>
           <div class="submenu">
             <a href="#">Daily Bill Summary</a><hr>
             <a href="#">A/c Wise Bill</a><hr>
@@ -49,7 +66,7 @@
         <a href="#">Receipts, Credit & Debit Notes</a><hr>
       </div>
     </div>
-
+ 
     <div class="dropdown">
       <button>Print</button>
       <div class="dropdown-content">
@@ -63,32 +80,15 @@
       <button>About</button>
     </div>
   </div>
-  <hr>
-    <div class="main">
-        <div class="day">
-            <p>© Softline Softwares, Kolhapur</p>
-            <p>Ph No. : 7972378977, 9307856854</p>
-            <p>E-mail : softlinesoftwares2001@gmail.com</p>
-        </div>
-        <div class="head">
-            <h2>RATNAGIRI TIMES</h2>
-            <p class="head-p">H.O : Times Bhavan, Maruti lane, Ratnagiri</p>
-            <h2>Advertisement Section</h2>
-        </div>
-        <div class="time">
-            <p class="time-p">Softline® Ver: v1.0</p>
-            <p class="time-p">Release : (7a)</p>
-            <p class="time-p">Valid upto : 31-Dec-2025</p>
-        </div>
-    </div>
+    
     <div class="container holographic-container">
       <div class="inner-container holographic-card">
-        <h1>Softline Softwares</h1><hr>
+        <h1 class="container-h1">Softline Softwares</h1><hr>
         <h4>Softline Softwares, Kolhapur</h4>
         <p class="add">Plot 18, Ayodhya Colony Kalamba Ring Road,</p>
         <p class="pcode">Kolhapur - 416007</p>
         <p class="ph">Ph No. : 7972378977, 9307856854</p>
-        <p class="email">E-mail : shrinivaskangralkar8055@gmail.com</p><hr>
+        <p class="email">E-mail : softlinesoftwares2001@gmail.com</p><hr>
         <p class="lic">This product is Licenced to:</p>
         <p class="lic-com">Daily Ratnagiri Times (Advt.)</p>
         <p class="lic-add">Dist - Ratnagiri, State - Maharashtra</p>

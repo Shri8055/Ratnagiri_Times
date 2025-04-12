@@ -57,7 +57,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             VALUES 
             (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = mysqli_prepare($conn, $sql);
-
             if ($stmt) {
                 mysqli_stmt_bind_param(
                     $stmt,
@@ -73,11 +72,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 if (mysqli_stmt_execute($stmt)) {
                     echo "<script>
-                        alert('New record added successfully!');
+                        alert('✅ New record added successfully!');
                         window.location.href = 'index.php';
                     </script>";
                 } else {
-                    echo "<script>alert('Error: " . mysqli_stmt_error($stmt) . "');</script>";
+                    echo "<script>alert('❌ Error: " . mysqli_stmt_error($stmt) . "');</script>";
                 }
 
                 mysqli_stmt_close($stmt);
@@ -87,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 }
-?>
+?> 
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -101,9 +100,104 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-<a href="home.php" style="position: absolute; margin: 10px 0"><button>Home</button></a>
     <div class="container">
-        <h1>Advertisement A/c's Master</h1>
+    <div class="main">
+        <div class="head-l">
+            <p>© Softline Softwares, Kolhapur</p>
+            <p>Ph No. : 7972378977, 9307856854</p>
+            <p>E-mail : softlinesoftwares2001@gmail.com</p>
+        </div>
+        <div class="head">
+            <h2 class="head-h2-1">RATNAGIRI TIMES</h2>
+            <p class="head-p">H.O : Times Bhavan, Maruti lane, Ratnagiri</p>
+            <h2 class="head-h2-2">Advertisement Section</h2>
+        </div>
+        <div class="head-r">
+            <p class="time-p">Softline® Ver: v1.0</p>
+            <p class="time-p">Release : (7a)</p>
+            <p class="time-p">Valid upto : 31-Dec-2025</p>
+        </div>
+    </div>
+
+    <div class="sidebar collapsed" id="sidebar">
+  <div class="menu-content">
+    <div class="dropdown">
+      <a href="home.php"><button class="dropbtn action-button">Home</button></a>
+    </div>
+    <div class="dropdown">
+      <button class="dropbtn action-button">Master</button>
+      <div class="dropdown-content">
+        <a href="index.php">A/c Master</a>
+        <a href="#">Personal Address</a>
+        <a href="edition.php">Edition Master</a>
+        <a href="ad_types.php">Ad Type Master</a>
+      </div>
+    </div>
+
+    <div class="dropdown">
+      <button class="dropbtn action-button">Data Entry</button>
+      <div class="dropdown-content">
+        <a href="bills.php">Daily Bills</a>
+        <a href="receipt.php">Receipts</a>
+        <a href="debit.php">Debit Notes</a>
+        <a href="credit.php">Credit Notes</a>
+      </div>
+    </div>
+
+    <div class="dropdown">
+      <button class="dropbtn action-button">Reports</button>
+      <div class="dropdown-content">
+        <div class="has-submenu">
+          <a href="#">Billing <span class="arw">▶</span></a>
+          <div class="submenu">
+            <a href="#">Daily Bill Summary</a>
+            <a href="#">A/c Wise Bill</a>
+            <a href="#">Particular A/c</a>
+            <a href="#">Editionwise Billing</a>
+          </div>
+        </div>
+        <a href="#">Monthly Reports</a>
+        <a href="#">Outstanding Statements</a>
+        <a href="#">Ledger</a>
+        <a href="#">Receipts, Credit & Debit Notes</a>
+      </div>
+    </div>
+
+    <div class="dropdown">
+      <button class="dropbtn action-button">Print</button>
+      <div class="dropdown-content">
+        <a href="#">Bills Calculation and Printing</a>
+        <a href="#">Duplicate Bill Print</a>
+        <a href="#">Bill Register</a>
+        <a href="#">Receipt Register</a>
+      </div>
+    </div>
+
+    <div class="dropdown">
+      <button class="dropbtn action-button">About</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toggle Button (outside sidebar) -->
+<button class="toggle-btn" onclick="toggleSidebar(this)">▶</button>
+
+<!-- Script -->
+<script>
+  function toggleSidebar(btn) {
+    const sidebar = document.getElementById('sidebar');
+    sidebar.classList.toggle('expanded');
+    btn.textContent = sidebar.classList.contains('expanded') ? '◀' : '▶';
+
+    // Toggle visibility of action buttons
+    const buttons = document.querySelectorAll('.action-button');
+    buttons.forEach(button => {
+      button.classList.toggle('hide-buttons', !sidebar.classList.contains('expanded'));
+    });
+  }
+</script>
+
+        <h3>Advertisement A/c's Master</h3>
         <form id="form" action="index.php" method="POST">
             <table>
                 <tr>

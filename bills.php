@@ -6,51 +6,78 @@ if (!$conn) {
 }
 $ed=$conn->query("SELECT * FROM ed");
 $ad=$conn->query("SELECT * FROM ad");
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (isset($_POST['add'])) {
-        $bill_no=$_POST['bill-no'];
-        $bill_date=$_POST['bill-date'];
-        $ac_no=$_POST['ac-no'];
-        $ac_name=$_POST['ac-name'];
-        $cli_name=$_POST['cli-name'];
-        $mob_no=$_POST['CmobNo'];
-        $cap=$_POST['caption'];
-        $r_o_no=$_POST['r-o-no'];
-        $r_o_date=$_POST['r-o-date'];
-        $pub_date=$_POST['pub-date'];
-        $page=$_POST['pg-no'];
-        $ed_type=$_POST['edition'];
-        $ad_type=$_POST['ad-type'];
-        $column=$_POST['col'];
-        $sp_pos_char=$_POST['col-pos-char'];
-        $sp_pos_rs=$_POST['col-rs'];
-        $sq_cm=$_POST['sqcms'];
-        $colr_char=$_POST['col-char'];
-        $colr_char_rs=$_POST['sq-col-rs'];
-        $tot_cm=$_POST['tocms'];
-        $tot_amt=$_POST['tot-col-rs'];
-        $inserts=$_POST['inserts'];
-        $less_com=$_POST['less-comm'];
-        $less_com_rs=$_POST['ins-rs'];
-        $rate=$_POST['rate'];
-        $amt_bef_tax=$_POST['gr-rs'];
-        $gross_amt=$_POST['gross-amt'];
-        $cgst=$_POST['cgst'];
-        $cgst_rs=$_POST['cgst-rs'];
-        $sgst=$_POST['sgst'];
-        $sgst_rs=$_POST['sgst-rs'];
-        $igst=$_POST['igst'];
-        $igst_rs=$_POST['igst-rs'];
-        $ad_rep=$_POST['adbyrep'];
-        $net_amt=$_POST['net-amt-rs'];
-        $net_amt_w=$_POST['netinw'];
-        $due_date_bill=$_POST['du-date'];
-        $color_ad=$_POST['col-ad'];
-        $curr_bal=$_POST['cur-bal-rs'];
+
+$bl_no_query = "SELECT MAX(bill_no) AS max_bl_no FROM bills";
+$bl_no_result = $conn->query($bl_no_query);
+$bl_no_row = $bl_no_result->fetch_assoc();
+$bill_no = $bl_no_row['max_bl_no'] + 1;
+if (!$bill_no) $bill_no = 1;
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
+    $bill_no = $_POST['bill-no'];
+    $bill_date = $_POST['bill-date'];
+    $ac_no = $_POST['ac-no'];
+    $ac_name = $_POST['ac-name'];
+    $cli_name = $_POST['cli-name'];
+    $mob_no = $_POST['CmobNo'];
+    $cap = $_POST['caption'];
+    $r_o_no = $_POST['r-o-no'];
+    $r_o_date = $_POST['r-o-date'];
+    $pub_date = $_POST['pub-date'];
+    $page = $_POST['pg-no'];
+    $ed_type = $_POST['edition'];
+    $ad_type = $_POST['ad-type'];
+    $column = $_POST['col'];
+    $sp_pos_char = $_POST['col-pos-char'];
+    $sp_pos_rs = floatval($_POST['col-rs']);
+    $sq_cm = floatval($_POST['sqcms']);
+    $colr_char = $_POST['col-char'];
+    $colr_char_rs = floatval($_POST['sq-col-rs']);
+    $tot_cm = floatval($_POST['tocms']);
+    $tot_amt = floatval($_POST['tot-col-rs']);
+    $inserts = intval($_POST['inserts']);
+    $less_com = floatval($_POST['less-comm']);
+    $less_com_rs = floatval($_POST['ins-rs']);
+    $rate = floatval($_POST['rate']);
+    $amt_bef_tax = floatval($_POST['gr-rs']);
+    $gross_amt = floatval($_POST['gross-amt']);
+    $cgst = floatval($_POST['cgst']);
+    $cgst_rs = floatval($_POST['cgst-rs']);
+    $sgst = floatval($_POST['sgst']);
+    $sgst_rs = floatval($_POST['sgst-rs']);
+    $igst = floatval($_POST['igst']);
+    $igst_rs = floatval($_POST['igst-rs']);
+    $ad_rep = $_POST['adbyrep'];
+    $net_amt = floatval($_POST['net-amt-rs']);
+    $net_amt_w = $_POST['netinw'];
+    $due_date_bill = $_POST['du-date'];
+    $color_ad = $_POST['col-ad'];
+    $curr_bal = floatval($_POST['cur-bal-rs']);
+ 
+    $stmt = $conn->prepare("INSERT INTO bills (
+        bill_no, bill_date, ac_no, ac_name, cli_name, mob_no, cap, r_o_no, r_o_date, pub_date, page,
+        ed_type, ad_type, col, sp_pos_char, sp_pos_rs, sq_cm, colr_char, colr_char_rs, tot_cm, tot_amt,
+        inserts, less_com, less_com_rs, rate, amt_bef_tax, gross_amt, cgst, cgst_rs, sgst, sgst_rs,
+        igst, igst_rs, ad_rep, net_amt, net_amt_w, due_date_bill, color_ad, curr_bal
+    ) VALUES (
+        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+    )");   
+
+    $stmt->bind_param(
+        "sssssssssssssssddsddddddddddddddddsdssd",
+        $bill_no, $bill_date, $ac_no, $ac_name, $cli_name, $mob_no, $cap, $r_o_no, $r_o_date, $pub_date,
+        $page, $ed_type, $ad_type, $column, $sp_pos_char, $sp_pos_rs, $sq_cm, $colr_char, $colr_char_rs,
+        $tot_cm, $tot_amt, $inserts, $less_com, $less_com_rs, $rate, $amt_bef_tax, $gross_amt, $cgst,
+        $cgst_rs, $sgst, $sgst_rs, $igst, $igst_rs, $ad_rep, $net_amt, $net_amt_w, $due_date_bill,
+        $color_ad, $curr_bal
+    );
+    if ($stmt->execute()) {
+        echo "<script>alert('✅ Bill record inserted successfully!');</script>";
+        echo "<script>window.location.href = window.location.pathname;</script>";
+    } else {
+        echo "<script>alert('❌ Error: " . addslashes($stmt->error) . "');</script>";
     }
-    echo "<pre>";
-        print_r($_POST);
-    echo "</pre>";
+    $stmt->close();
 }
 ?>
 <!DOCTYPE html>
@@ -66,25 +93,113 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-    <a class="main-a" href="home.php" style="position: absolute; margin: 10px 0"><button>Home</button></a>
-    <div class="main">
+<div class="main">
+        <div class="head-l">
+            <p>© Softline Softwares, Kolhapur</p>
+            <p>Ph No. : 7972378977, 9307856854</p>
+            <p>E-mail : softlinesoftwares2001@gmail.com</p>
+        </div>
+        <div class="head">
+            <h2 class="head-h2-1">RATNAGIRI TIMES</h2>
+            <p class="head-p">H.O : Times Bhavan, Maruti lane, Ratnagiri</p>
+            <h2 class="head-h2-2">Advertisement Section</h2>
+        </div>
+        <div class="head-r">
+            <p class="time-p">Softline® Ver: v1.0</p>
+            <p class="time-p">Release : (7a)</p>
+            <p class="time-p">Valid upto : 31-Dec-2025</p>
+        </div>
+    </div>
+  
+    <div class="sidebar collapsed" id="sidebar">
+  <div class="menu-content">
+    <div class="dropdown">
+      <a href="home.php"><button class="dropbtn action-button">Home</button></a>
+    </div>
+    <div class="dropdown">
+      <button class="dropbtn action-button">Master</button>
+      <div class="dropdown-content">
+        <a href="index.php">A/c Master</a>
+        <a href="#">Personal Address</a>
+        <a href="edition.php">Edition Master</a>
+        <a href="ad_types.php">Ad Type Master</a>
+      </div>
+    </div>
+
+    <div class="dropdown">
+      <button class="dropbtn action-button">Data Entry</button>
+      <div class="dropdown-content">
+        <a href="bills.php">Daily Bills</a>
+        <a href="receipt.php">Receipts</a>
+        <a href="debit.php">Debit Notes</a>
+        <a href="credit.php">Credit Notes</a>
+      </div>
+    </div>
+
+    <div class="dropdown">
+      <button class="dropbtn action-button">Reports</button>
+      <div class="dropdown-content">
+        <div class="has-submenu">
+          <a href="#">Billing <span class="arw">▶</span></a>
+          <div class="submenu">
+            <a href="#">Daily Bill Summary</a>
+            <a href="#">A/c Wise Bill</a>
+            <a href="#">Particular A/c</a>
+            <a href="#">Editionwise Billing</a>
+          </div>
+        </div>
+        <a href="#">Monthly Reports</a>
+        <a href="#">Outstanding Statements</a>
+        <a href="#">Ledger</a>
+        <a href="#">Receipts, Credit & Debit Notes</a>
+      </div>
+    </div>
+
+    <div class="dropdown">
+      <button class="dropbtn action-button">Print</button>
+      <div class="dropdown-content">
+        <a href="#">Bills Calculation and Printing</a>
+        <a href="#">Duplicate Bill Print</a>
+        <a href="#">Bill Register</a>
+        <a href="#">Receipt Register</a>
+      </div>
+    </div>
+
+    <div class="dropdown">
+      <button class="dropbtn action-button">About</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toggle Button (outside sidebar) -->
+<button class="toggle-btn" onclick="toggleSidebar(this)">▶</button>
+
+<!-- Script -->
+<script>
+  function toggleSidebar(btn) {
+    const sidebar = document.getElementById('sidebar');
+    sidebar.classList.toggle('expanded');
+    btn.textContent = sidebar.classList.contains('expanded') ? '◀' : '▶';
+
+    // Toggle visibility of action buttons
+    const buttons = document.querySelectorAll('.action-button');
+    buttons.forEach(button => {
+      button.classList.toggle('hide-buttons', !sidebar.classList.contains('expanded'));
+    }); 
+  }
+</script>
+<h3 class="h3">Advitisement Bills</h3>
+    <div class="dateday">
         <div class="day">
             <p id="current-day"></p>
             <p id="current-date"></p>
         </div>
-        <h2>RATNAGIRI TIMES</h2>
-        <div class="time">
-            <p>Time:</p>
-            <p id="current-time"></p>
-        </div>
-    </div>
-    <hr>
+        
     <form id="form" action="bills.php" method="POST">
-        <h2 class="h2">Advitisement Bills</h2>
     <table>
         <tr>
             <td><label for="bill-no">Bill No.:</label></td>
-            <td><input id="bill-no" name="bill-no" type="number" value="0" style="text-align: center;" readonly></td>
+            <td><input id="bill-no" name="bill-no" type="number" value="<?php echo $bill_no ?>" style="text-align: center;" readonly></td>
             <td><label for="bill-date">Bill Date:</label></td>
             <td><input id="bill-date" name="bill-date" type="date" tabindex="1"></td>
             <td><label for="ac-no">A/c No.:</label></td>
@@ -93,7 +208,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <tr>
             <td><label for="ac-name">A/c Name:</label></td>
                 <td>
-                    <input id="ac-name" name="ac-name" type="text" autocomplete="off" oninput="searchAccount(this.value)"  tabindex="2">
+                    <input id="ac-name" name="ac-name" type="text" autocomplete="off" oninput="searchAccount(this.value)"  tabindex="2" required>
                     <div id="search-results" style="position:absolute; z-index:1000; background-color: lightgreen; border:1px solid #ccc; width:40%; max-height: 250px; overflow-y:auto; display:none;">
                         <table id="results-table" border="1px" style="width:100%; background:white; border-collapse:collapse;">
                             <thead style="background:#bc2222;">
@@ -209,6 +324,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         });
                     </script>
                 </td>
+                <td><label for=""></label></td>
+                <td><input type="hidden"></td>
+                <td><label for="ad-rep">Ad. by Repre:</label></td>
+                <td>
+                    <select name="adbyrep" id="ad-rep" tabindex="2">
+                        <option value="-">-</option>
+                        <option value="Reporters">Reporters</option>
+                        <option value="Representative">Representative</option>
+                        <option value="Office Staff">Office Staff</option>
+                    </select>
+                </td>
         </tr>
         <tr>
             <td><label for="cli-name">Client Name:</label></td>
@@ -216,7 +342,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <td><label for=""></label></td>
             <td><input type="hidden"></td>
             <td><label for="CmobNo">Mob No.:</label></td>
-            <td><input id="CmobNo" name="CmobNo" type="number" tabindex="4"></td>
+            <td><input id="CmobNo" name="CmobNo" type="number" tabindex="4" required></td>
             <span id="mob-no-error" style="color: red; font-size: 14px;"></span>
             <script>
                 let mobInput = document.getElementById("CmobNo");
@@ -232,13 +358,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </tr>
         <tr>
             <td><label for="captions">Captions:</label></td>
-            <td colspan="5"><input id="captions" name="caption" type="text" tabindex="5"></td>
+            <td colspan="5"><input id="captions" name="caption" type="text" tabindex="5" required></td>
         </tr>
         <tr>
             <td><label for="r-o-no">R.O. No.:</label></td>
-            <td><input id="r-o-no" name="r-o-no" type="number" tabindex="6"></td>
+            <td><input id="r-o-no" name="r-o-no" type="number" tabindex="6" required></td>
             <td><label for="r-o-date">R.O. Date:</label></td>
-            <td><input id="r-o-date" name="r-o-date" type="date" tabindex="7"></td>
+            <td><input id="r-o-date" name="r-o-date" type="date" tabindex="7" required></td>
             <td class="pub_date_td"><label for="pub-date">Pub. Date:</label></td>
             <td>
                 <input id="pub-date" name="pub-date" type="date" tabindex="8">
@@ -284,7 +410,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </tr>
         <tr>
             <td><label for="sq-cms">Sq.Cms.:</label></td>
-            <td><input id="sq-cms" name="sqcms" type="number" value="0" tabindex="13"></td>
+            <td><input id="sq-cms" name="sqcms" type="number" value="0.00" tabindex="13" required></td>
             <td><label for="col-char">Color Charges(%):</label></td>
             <td><input id="col-char" name="col-char" type="number" value="0.00" tabindex="18"></td>
             <td><label for="sq-rs">Rs:</label></td>
@@ -292,7 +418,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </tr>
         <tr>
             <td><label for="tocms">Total Cms.:</label></td>
-            <td><input id="tocms" name="tocms" type="number" value="0" tabindex="14" readonly></td>
+            <td><input id="tocms" name="tocms" type="number" value="0.00" tabindex="14" readonly></td>
             <td><label for=""></label></td>
             <td><input type="hidden"></td>
             <td><label for="to-rs">Total Amt. Rs:</label></td>
@@ -304,11 +430,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <td><label for="les-comm">Less Commi(%):</label></td>
             <td><input id="les-comm" name="less-comm" type="number" min="0" max="100" value="0.00" tabindex="19"></td>
             <td><label for="ins-rs">Rs:</label></td>
-            <td><input id="ins-rs" name="ins-rs" type="number" value="0.00"></td>
+            <td><input id="ins-rs" name="ins-rs" type="number" step="0.01" value="0.00"></td>
         </tr>
         <tr>
             <td><label for="rate">Rate:</label></td>
-            <td><input id="rate" name="rate" type="number" value="0.00" tabindex="16"></td>
+            <td><input id="rate" name="rate" type="number" value="0.00" tabindex="16" required></td>
             <td><label for=""></label></td>
             <td><input type="hidden"></td>
             <td><label for="gr-rs">Amt. Bef Tax Rs:</label></td>
@@ -320,7 +446,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <td><label class="gst" for="cgst">CGST : @</label></td>
             <td><input id="cgst" name="cgst" type="number" value="2.50" tabindex="20"></td>
             <td><label class="cgst-rs" for="cgst-rs">Rs: </label></td>
-            <td><input id="cgst-rs" name="cgst-rs" type="number" value="0.00"></td>
+            <td><input id="cgst-rs" name="cgst-rs" type="number" min="0" step="0.01" value="0.00"></td>
         </tr>
         <tr>
             <td><label for=""></label></td>
@@ -328,7 +454,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <td><label class="gst" for="sgst">SGST : @</label></td>
             <td><input id="sgst" name="sgst" type="number" value="2.50" tabindex="21"></td>
             <td><label class="sgst-rs" for="sgst-rs">Rs: </label></td>
-            <td><input id="sgst-rs" name="sgst-rs" type="number" value="0.00"></td>
+            <td><input id="sgst-rs" name="sgst-rs" type="number" step="0.01" value="0.00"></td>
         </tr>
         <tr>
             <td><label for=""></label></td>
@@ -336,26 +462,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <td><label class="gst" for="igst">IGST : @</label></td>
             <td><input id="igst" name="igst" type="number" value="0.00" tabindex="22"></td>
             <td><label class="igst-rs" for="igst-rs">Rs: </label></td>
-            <td><input id="igst-rs" name="igst-rs" type="number" value="0.00"></td>
-        </tr>
-        <tr>
-            <td><label for="ad-rep">Ad. by Repre:</label></td>
-            <td>
-                <select name="adbyrep" id="ad-rep" tabindex="23">
-                    <option value="-">-</option>
-                    <option value="Reporters">Reporters</option>
-                    <option value="Representative">Representative</option>
-                    <option value="Office Staff">Office Staff</option>
-                </select>
-            </td>
-            <td><label for=""></label></td>
-            <td><input type="hidden"></td>
-            <td><label for="net-amt">NET AMT Rs.:</label></td>
-            <td><input id="net-amt" name="net-amt-rs" type="number" value="0.00" readonly></td>
+            <td><input id="igst-rs" name="igst-rs" type="number" step="0.01" value="0.00"></td>
         </tr>
         <tr>
             <td><label for="net-in-w">NET in words: </label></td>
             <td><input id="net-in-w" name="netinw" type="text" value="Rs. Only"></td>
+            <td><label for=""></label></td>
+            <td><input type="hidden"></td>
+            <td><label for="net-amt">NET AMT Rs.:</label></td>
+            <td><input id="net-amt" name="net-amt-rs" type="number" value="0.00" readonly></td>
         </tr>
         <tr>
             <td><label for="du-date">Due date of this bill:</label></td>
@@ -470,6 +585,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <button type="submit" tabindex="28" class="print-logo">PRINT <i class="fa-solid fa-print"></i></button>
         </div>
     </form>
+    
+    <div class="time">
+            <p>Time:</p>
+            <p id="current-time"></p>
+        </div>
+    </div>
     <p class="footer">Software Developed by: Vyanktesh Computers, Kolhapur, Ph.No.: 7972378977, 9307856854 , E-mail : vyanktesh2001@gmail.com</p>
     <script>
         document.addEventListener('keydown', function (e) {

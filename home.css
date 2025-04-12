@@ -9,16 +9,19 @@
     justify-content: space-between;
     align-items: center;
     text-align: center;
-    padding: 30px;
+    padding: 10px;
     position: relative;
     box-shadow: 0px 30px 40px rgba(207, 239, 160, 0.891);
-    
   }
-  .main, .day > p, .head, .head > h2, .head-p, .time-p {
+  .main, .head-l > p, .head, .head > h2, .head-p, .time-p {
     background-color: rgba(207, 239, 160, 0.891);
   }
-  
-  .day, .time {
+  .container-h1{
+    text-shadow: 0px 0px 40px rgb(157, 0, 255);
+    text-shadow: 1px 0 #fff, -1px 0 #fff, 0 1px #fff, 0 -1px #fff,
+             1px 1px #fff, -1px -1px #fff, 1px -1px #fff, -1px 1px #fff;
+  }
+  .head-l, .head-r {
     width: 25%;
     font-size: 14px;
   }
@@ -30,8 +33,11 @@
     text-align: center;
   }
   
-  .head h2 {
-    margin: 5px 0;
+  .head{
+    font-size: 16px;
+  }
+  .head-h2-2{
+    font-size: 18px;
   }
 
   ul{
@@ -53,7 +59,7 @@
   }
 
   .navbar {
-    background: #f1f1f1;
+    margin-top: 90px;
     padding: 10px;
   }
 
@@ -63,8 +69,6 @@
   }
 
   .dropdown > button {
-    background: #e3e3e3;
-    border: 1px solid #aaa;
     padding: 10px 15px;
     font-size: 18px;
     border-radius: 5px;
@@ -91,7 +95,8 @@
   }
 
   .dropdown-content a:hover {
-    background-color: #f0f0f0;
+    background-color: #007bff;
+    color: white;
   }
 
   .dropdown:hover .dropdown-content {
@@ -121,9 +126,9 @@
   .container{
     width: 50%;
     margin: auto;
-    margin-top: 10%;
+    margin-top: 7%;
     padding: 20px;
-    border: 1px solid rgba(122, 122, 122, 0.668);
+    border: 1px solid rgba(100, 214, 255, 0.668);
     border-radius: 10px;
     box-shadow: 0px 0px 50px rgb(118, 211, 241);
   }
@@ -143,10 +148,27 @@
   .inner-container > hr{
     margin: 10px 0;
   }
+  .arw{
+    background-color: #007bff;
+    padding: 2px;
+    color: white;
+  }
+  button {
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+    margin: 0 5px;
+}
+button:hover {
+    background-color: #0056b3;
+}
 
 
 
-  /* .holographic-card {
+  .holographic-card {
     position: relative;
     padding: 20px;
     border-radius: 20px;
@@ -186,5 +208,5 @@
     100% {
       transform: rotate(360deg);
     }
-  } */
+  }
   

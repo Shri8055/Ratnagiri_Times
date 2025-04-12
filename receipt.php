@@ -36,11 +36,16 @@
             </tr>
             <tr>
                 <td><label for="pay-ty">Payment Type:</label></td>
-                <td><input id="pay-ty" name="pay-ty" type="text"></td>
+                <td><select name="" id="">
+                        <option value="">Cash</option>
+                        <option value="">Cheque</option>
+                        <option value="">DD</option>
+                    </select>        
+                </td>
                 <td><label for="chq-no">Cheque No.:</label></td>
-                <td><input id="chq-no" name="chq-no" type="text" style="text-transform: uppercase;"></td>
+                <td><input id="chq-no" name="chq-no" type="text" placeholder="6 Digits only"></td>
                 <td><label for="chq-date">Cheque Date:</label></td>
-                <td><input id="chq-date" name="chq-date" type="date"></td>
+                <td><input id="chq-date" name="chq-date" min="1" max="6" type="date"></td>
             </tr>
             <tr>
                 <td><label for="bank-na">Bank Name:</label></td>
