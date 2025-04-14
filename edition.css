@@ -107,7 +107,7 @@ td > a{
     font-size: 14px;
   }
   
-  .head {
+  .head { 
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
@@ -167,9 +167,9 @@ td > a{
   }
 
   .menu-content {
-    padding-top: 60px;
+    padding: 60px 10px 0px 20px;
   }
-
+ 
   .dropdown {
     position: relative;
   }
@@ -186,6 +186,7 @@ td > a{
     margin: 10px 0;
     transition: background-color 0.3s ease, color 0.3s ease;
     font-size: 16px;
+    border-radius: 8px;
   }
 
   .dropdown-content {

@@ -9,7 +9,7 @@ $ac_no_result = $conn->query($ac_no_query);
 $ac_no_row = $ac_no_result->fetch_assoc();
 $ac_no = $ac_no_row['max_ac_no'] + 1;
 if (!$ac_no) $ac_no = 1;
-
+ 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['add'])) {
         $ac_open_date = $_POST['date'];

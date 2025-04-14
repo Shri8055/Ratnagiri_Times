@@ -12,7 +12,7 @@ if (isset($_GET['edit'])) {
         $ed_cd = $row['ed_cd'];
         $ed_nm = $row['ed_nmae'];
     }
-}
+} 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['add'])) {
         $ed_cd = strtoupper($_POST['ed_cd']);
@@ -140,7 +140,7 @@ $editions = $conn->query("SELECT * FROM ed");
     buttons.forEach(button => {
       button.classList.toggle('hide-buttons', !sidebar.classList.contains('expanded'));
     }); 
-  }
+  } 
 </script>
     <div class="container">
         <h3 style="text-align: center;">EDITION MASTER</h3>

@@ -263,7 +263,7 @@ body {
   border-right: 1px solid #ccc;
   z-index: 1000;
   overflow: hidden; /* hide all content when collapsed */
-  padding: 10px 0;
+  padding: 10px 0px;
   font-size: 18px;
 }
 
@@ -289,7 +289,7 @@ body {
 }
 
 .menu-content {
-  padding-top: 60px;
+  padding: 60px 10px 0px 20px;
 }
 
 .dropdown {
