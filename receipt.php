@@ -1,3 +1,61 @@
+<?php
+$conn = mysqli_connect("localhost", "root", "", "pmedia", 4306);
+if (!$conn) {
+    die("Failed to connect to database! " . mysqli_connect_error());
+}
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+  if (isset($_POST['add'])) {
+    $rct_no=$_POST['r-no'];
+    $rct_date=$_POST['r-date'];
+    $ac_no=$_POST['ac-no'];
+    $ac_name=$_POST['ac-name'];
+    $rct_amt=$_POST['r-amt'];
+    $pay_typ=$_POST['pay-typ'];
+    $chq_no=$_POST['chq-no'] ?? '';
+    $chq_date=$_POST['chq-date'] ?? '';
+    $bank_name=$_POST['bank-na'] ?? '';
+    $bank_bran=$_POST['bank-branc'] ?? '';
+    $narr=$_POST['narr'];
+    $cash_depo=$_POST['cash-de-in'];
+    $current_bal=$_POST['curr-bal'];
+    $sql = "INSERT INTO rct (
+        rct_no, receipt_date, ac_no, ac_name, amount, payment_type,
+        cheque_no, cheque_date, bank_name, bank_branch,
+        narration, cash_depo, current_balance
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $stmt = mysqli_prepare($conn, $sql);
+    if ($stmt) {
+    mysqli_stmt_bind_param(
+      $stmt,
+      "ssssdsdsssssd",
+      $rct_no,
+      $rct_date,
+      $ac_no,
+      $ac_name,
+      $rct_amt,
+      $pay_typ,
+      $chq_no,
+      $chq_date,
+      $bank_name,
+      $bank_bran,
+      $narr,
+      $cash_depo,
+      $current_bal
+    );
+    if (mysqli_stmt_execute($stmt)) {
+      echo "<script>alert('✅ Receipt added successfully!');</script>";
+      echo "<script>window.location.href = window.location.pathname;</script>";
+    } else {
+      echo "Error executing statement: " . mysqli_stmt_error($stmt);
+    }
+    mysqli_stmt_close($stmt);
+    } else {
+    echo "Error preparing statement: " . mysqli_error($conn);
+    }
+    mysqli_close($conn);
+  }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -103,15 +161,15 @@
   } 
 </script>
     <h3>RECEIPTS</h3>
-    <form action="receipt.php" method="POST">
+    <form id="form" action="receipt.php" method="POST">
         <table>
             <tr>
                 <td><label for="r-no">Receipt No.:</label></td>
-                <td><input id="r-no" name="r-no" type="text" tabindex="1"></td>
+                <td><input id="r-no" name="r-no" type="text" tabindex="1" required></td>
                 <td><label for="r-date">Receipt Date.:</label></td>
                 <td><input id="r-date" name="r-date" type="date" tabindex="2"></td>
                 <td><label for="ac-code">A/c No.:</label></td>
-                <td><input id="ac-code" type="text"></td>
+                <td><input id="ac-code" name="ac-no" type="text" style="text-align: center;"></td>
             </tr>
             <tr>
             <td><label for="ac-name">A/c Name:</label></td>
@@ -134,28 +192,23 @@
                     <script>
                         let selectedIndex = -1;
                         let currentData = [];
-
                         const acNameInput = document.getElementById('ac-name');
                         const resultsBox = document.getElementById('search-results');
                         const tbody = document.querySelector('#results-table tbody');
-
                         acNameInput.addEventListener('input', function () {
                             const term = this.value;
                             selectedIndex = -1;
-
                             if (term.length < 1) {
                                 tbody.innerHTML = '';
                                 resultsBox.style.display = 'none';
                                 currentData = [];
                                 return;
                             }
-
                             fetch(`search_account.php?query=${encodeURIComponent(term)}`)
                                 .then(res => res.json())
                                 .then(data => {
                                     currentData = data;
                                     tbody.innerHTML = '';
-
                                     if (data.length === 0) {
                                         const noRow = document.createElement('tr');
                                         noRow.innerHTML = `<td colspan="3" style="text-align:center; color: crimson;">No result found</td>`;
@@ -180,16 +233,12 @@
                                             tbody.appendChild(row);
                                         });
                                     }
-
                                     resultsBox.style.display = 'block';
                                 });
                         });
-
                         acNameInput.addEventListener('keydown', function (e) {
                             const rows = document.querySelectorAll('#results-table tbody tr');
-
                             if (!rows.length || currentData.length === 0) return;
-
                             if (e.key === 'ArrowDown') {
                                 e.preventDefault();
                                 selectedIndex = (selectedIndex + 1) % currentData.length;
@@ -209,13 +258,11 @@
                                 }
                             }
                         });
-
                         function highlight(rows) {
                             rows.forEach((row, i) => {
                                 row.style.background = i === selectedIndex ? '#cce5ff' : '';
                             });
                         }
-
                         function fillAccount(account) {
                             document.getElementById('ac-code').value = account.ac_no;
                             document.getElementById('ac-name').value = account.ac_name;
@@ -223,7 +270,6 @@
                             resultsBox.style.display = 'none';
                             selectedIndex = -1;
                         }
-
                         document.addEventListener('click', function (e) {
                             if (!resultsBox.contains(e.target) && e.target.id !== 'ac-name') {
                                 resultsBox.style.display = 'none';
@@ -256,7 +302,7 @@
                 <td><label for=""></label></td>
                 <td><input type="hidden"></td>
                 <td><label for="r-amt">Receipt Amt.:</label></td>
-                <td><input id="r-amt" name="r-amt" type="text" tabindex="4"></td>
+                <td><input id="r-amt" name="r-amt" type="text" tabindex="4" required></td>
             </tr>
             <tr>
                 <td><label for="pay-ty">Payment Type:</label></td>
@@ -270,23 +316,24 @@
                     </select>        
                 </td>
                 <td><label for="chq-no">Cheque No.:</label></td>
-                <td><input id="chq-no" name="chq-no" type="text" placeholder="6 Digits only" tabindex="6"></td>
+                <td><input id="chq-no" name="chq-no" type="text" placeholder="" tabindex="6" required></td>
+                <span id="len-error" style="color: red; font-size: 14px;"></span>
                 <td><label for="chq-date">Cheque Date:</label></td>
-                <td><input id="chq-date" name="chq-date" min="1" max="6" type="date" tabindex="7"></td>
+                <td><input id="chq-date" name="chq-date" min="1" max="6" type="date" tabindex="7" required></td>
             </tr>
             <tr>
                 <td><label for="bank-na">Bank Name:</label></td>
-                <td><input id="bank-na" name="bank-na" type="text" tabindex="8"></td>
+                <td><input id="bank-na" name="bank-na" type="text" tabindex="8" required></td>
                 <td><label for=""></label></td>
                 <td><input type="hidden"></td>
                 <td><label for="bank-branc">Bank Branch:</label></td>
-                <td><input id="bank-branc" name="bank-branc" type="text" tabindex="9"></td>
+                <td><input id="bank-branc" name="bank-branc" type="text" tabindex="9" required></td>
             </tr>
             <tr>
                 <td><label for="narr">Narration:</label></td>
-                <td><input id="narr" name="narr" type="text" style="width: 230%;" tabindex="10"></td>
+                <td><input id="narr" name="narr" type="text" style="width: 230%;" tabindex="10" value="Against Bill - "></td>
             </tr>
-            <tr>
+            <tr> 
                 <td><label for="cash-de-in">Cash Depo.in:</label></td>
                 <td>
                     <select name="cash-de-in" id="cash-de-in" style="width: 140%;" tabindex="11">
@@ -310,10 +357,10 @@
           const bankName = document.getElementById("bank-na");
           const bankBranch = document.getElementById("bank-branc");
           const chequeLabel = document.querySelector("label[for='chq-no']");
-
+          const dateLabel = document.querySelector("label[for='chq-date']");
+          let lenError = document.getElementById("len-error");
           function updateFields() {
             const type = paymentType.value;
-
             chequeNo.disabled = false;
             chequeDate.disabled = false;
             bankName.disabled = false;
@@ -326,32 +373,58 @@
             chequeNo.removeEventListener("input", validateChequeNo);
             chequeNo.removeEventListener("input", validateUPINo);
             chequeNo.removeEventListener("input", validateDDNo);
-
             if (type === "Cash") {
               chequeNo.disabled = true;
               chequeDate.disabled = true;
               bankName.disabled = true;
               bankBranch.disabled = true;
-              chequeLabel.textContent = "-";
-
+              chequeLabel.textContent = "";
+              dateLabel.textContent = "-";
+              dateLabel.textContent = "";
             } else if (type === "Cheque") {
               chequeNo.maxLength = 6;
               chequeLabel.textContent = "Cheque No.:";
+              chequeNo.placeholder = "Cheque no 6 Digits only";
+              dateLabel.textContent = "Cheque Date : ";
+              chequeNo.addEventListener("blur", function() {
+                if(this.value.length !== 6){
+                  lenError.textContent = " Cheque number must be 6 digits! ";
+                }else{
+                  lenError.textContent = "";
+                }
+              });
               chequeNo.addEventListener("input", validateChequeNo);
-
             } else if (type === "Demand Draft") {
               chequeNo.maxLength = 6;
               chequeLabel.textContent = "D.D. No.:";
+              chequeNo.placeholder = "DD no 6 Digits only";
+              dateLabel.textContent = "D.D. Date :";
+              chequeNo.addEventListener("blur", function() {
+                if(this.value.length !== 6){
+                  lenError.textContent = " D.D number must be 6 digits! ";
+                }else{
+                  lenError.textContent = "";
+                }
+              });
               chequeNo.addEventListener("input", validateDDNo);
-
             } else if (type === "UPI Payment") {
               chequeNo.maxLength = 12;
               chequeLabel.textContent = "UPI Ref. No.:";
+              chequeNo.placeholder = "UPI no 12 Digits only";
+              dateLabel.textContent = "UPI Ref Date :";
+              chequeNo.addEventListener("blur", function() {
+                if(this.value.length !== 12){
+                  lenError.textContent = " UPI number must be 12 digits! ";
+                }else{
+                  lenError.textContent = "";
+                }
+              });
               chequeNo.addEventListener("input", validateUPINo);
-
             } else if (type === "NEFT" || type === "RTGS") {
               chequeLabel.textContent = `${type} Ref. No.:`;
-              chequeNo.maxLength = 10;
+              chequeNo.placeholder = "Length < 25 Digits only";
+              dateLabel.textContent = "Date :";
+              chequeNo.maxLength = 25;
             }
           }
           function validateChequeNo(e) {
@@ -375,9 +448,36 @@
           paymentType.addEventListener("change", updateFields);
           window.addEventListener("DOMContentLoaded", updateFields);
         </script>
+        <script>
+          document.getElementById("form").addEventListener("submit", function(event) {
+            const type = paymentType.value;
+            const val = chequeNo.value.trim();
+            let isValid = true;
+
+            // Reset error
+            lenError.textContent = "";
+
+            if (type === "Cheque" || type === "Demand Draft") {
+              if (val.length !== 6) {
+                lenError.textContent = ` ${type} number must be 6 digits! `;
+                isValid = false;
+              }
+            } else if (type === "UPI Payment") {
+              if (val.length !== 12) {
+                lenError.textContent = " UPI number must be 12 digits! ";
+                isValid = false;
+              }
+            }
+
+            // Prevent form submission if invalid
+            if (!isValid) {
+              event.preventDefault();
+            }
+          });
+        </script>
         <div class="buttons">
-            <button type="button"  tabindex="12">ADD</button>
-            <button type="button" tabindex="13">Rct LIST</button>
+            <button type="submit" tabindex="12" name="add">ADD</button>
+            <button type="submit" tabindex="13">Rct LIST</button>
         </div>
     </form>
     <script>

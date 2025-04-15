@@ -45,8 +45,11 @@ table{
 #narr, #ac-na-ci{
     min-width: 215%;
 }
-#r-date, #chq-date{
-    min-width: 76%;
+#r-date{
+  width: 89%;
+}
+#chq-date{
+    width: 76%;
 }
 #r-no, #ac-code, #chq-no{
     font-weight: bold;
@@ -76,7 +79,9 @@ button {
     transition: 0.3s;
     margin: 0 5px;
 }
-
+#chq-date, #r-amt, #bank-branc{
+  width: 88%;
+}
 button:hover {
     background-color: #0056b3;
 }

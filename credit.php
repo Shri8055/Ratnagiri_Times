@@ -5,11 +5,11 @@ if (!$conn) {
 }
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   if (isset($_POST['add'])) {
-    $dbt_no=$_POST['dr-no'];
-    $dbt_date=$_POST['dr-date'];
+    $cre_no=$_POST['cr-no'];
+    $cre_date=$_POST['cr-date'];
     $ac_no=$_POST['ac-no'];
     $ac_name=$_POST['ac-name'];
-    $dbt_amt=$_POST['dr-nt-amt'];
+    $cre_amt=$_POST['cr-nt-amt'];
     $pay_typ=$_POST['pay-typ'];
     $chq_no=$_POST['chq-no'] ?? '';
     $chq_date=$_POST['chq-date'] ?? '';
@@ -18,8 +18,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $narr=$_POST['narr'];
     $cash_depo=$_POST['cash-de-in'];
     $current_bal=$_POST['curr-bal'];
-    $sql = "INSERT INTO dbt (
-        dbt_no, debit_date, ac_no, ac_name, amount, payment_type,
+    $sql = "INSERT INTO cre (
+        cre_no, credit_date, ac_no, ac_name, amount, payment_type,
         cheque_no, cheque_date, bank_name, bank_branch,
         narration, cash_depo, current_balance
     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -28,11 +28,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     mysqli_stmt_bind_param(
       $stmt,
       "ssssdsdsssssd",
-      $dbt_no,
-      $dbt_date,
+      $cre_no,
+      $cre_date,
       $ac_no,
       $ac_name,
-      $dbt_amt,
+      $cre_amt,
       $pay_typ,
       $chq_no,
       $chq_date,
@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       $current_bal
     );
     if (mysqli_stmt_execute($stmt)) {
-      echo "<script>alert('✅ Debit Note added successfully!');</script>";
+      echo "<script>alert('✅ Credit Note added successfully!');</script>";
       echo "<script>window.location.href = window.location.pathname;</script>";
     } else {
       echo "Error executing statement: " . mysqli_stmt_error($stmt);
@@ -61,8 +61,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ratnagiri Times | DEBIT NOTE</title>
-    <link rel="stylesheet" href="debit.css">
+    <title>Ratnagiri Times | CREDIT NOTE</title>
+    <link rel="stylesheet" href="credit.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Poppins:wght@100..900&display=swap" rel="stylesheet">
@@ -153,14 +153,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }); 
       } 
     </script>
-    <h3>DEBIT NOTES</h3>
-    <form id="form" action="debit.php" method="POST">
+    <h3>CREDIT NOTES</h3>
+    <form id="form" action="credit.php" method="POST">
     <table>
             <tr>
-              <td><label for="dr-no">Dr. Note No.:</label></td>
-                <td><input id="dr-no" name="dr-no" type="text" tabindex="1" required></td>
-                <td><label for="dr-date">Debit Date.:</label></td>
-                <td><input id="dr-date" name="dr-date" type="date" tabindex="2"></td>
+              <td><label for="cr-no">Cr. Note No.:</label></td>
+                <td><input id="cr-no" name="cr-no" type="text" tabindex="1" required></td>
+                <td><label for="cr-date">Credit Date.:</label></td>
+                <td><input id="cr-date" name="cr-date" type="date" tabindex="2"></td>
                 <td><label for="ac-code">A/c No.:</label></td>
                 <td><input id="ac-code" name="ac-no" type="text" style="text-align: center;" readonly></td>
             </tr>
@@ -294,8 +294,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </td>
                 <td><label for=""></label></td>
                 <td><input type="hidden"></td>
-                <td><label for="dr-nt-amt">Dr. Note Amt.:</label></td>
-                <td><input id="dr-nt-amt" name="dr-nt-amt" type="text"tabindex="4" required></td>
+                <td><label for="cr-nt-amt">Cr. Note Amt.:</label></td>
+                <td><input id="cr-nt-amt" name="cr-nt-amt" type="text"tabindex="4" required></td>
             </tr>
             <tr>
                 <td><label for="pay-ty">Payment Type:</label></td>
@@ -447,7 +447,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             const val = chequeNo.value.trim();
             let isValid = true;
 
-            // Reset error
             lenError.textContent = "";
 
             if (type === "Cheque" || type === "Demand Draft") {
@@ -462,7 +461,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
               }
             }
 
-            // Prevent form submission if invalid
             if (!isValid) {
               event.preventDefault();
             }
@@ -478,7 +476,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     function updateCurrentDate() {
         const now = new Date();
         const formattedDate = now.toISOString().split("T")[0]; 
-        document.getElementById('dr-date').value = formattedDate;
+        document.getElementById('cr-date').value = formattedDate;
         document.getElementById('chq-date').value = formattedDate;
     }
     updateCurrentDate();

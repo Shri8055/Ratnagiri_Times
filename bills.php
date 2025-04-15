@@ -655,7 +655,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
         if (!isValid) {
             event.preventDefault();
         }
-    });
+        });
         function updateDateTime() {
             const now = new Date();
             const options = { weekday: 'long' };

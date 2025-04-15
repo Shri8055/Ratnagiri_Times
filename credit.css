@@ -1,7 +1,7 @@
 *{
     margin: 0;
     padding: 0;
-    background-color: #D8F3DC;
+    background-color: #fcd0c3;
     font-family: "Inter", sans-serif;
 }
 h3{ 
@@ -66,13 +66,13 @@ button {
     transition: 0.3s;
     margin: 0 5px;
 }
-#dr-date{
+#cr-date{
   width: 92%;
 }
-#dr-no, #ac-code{
+#cr-no, #ac-code{
   font-weight: bold;
 }
-#dr-nt-amt, #bank-branc, #chq-date{
+#cr-nt-amt, #bank-branc, #chq-date{
   width: 87%;
 }
 #bank-na{
