@@ -445,6 +445,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <td><label for="currbal">Current Balance:</label></td>
                     <td><input id="currbal" name="currbal" type="text" min="0" step="any" class="highlight-red" value="0.00" readonly></td>
                 </tr>
+                <script>
+                    document.getElementById("bal").addEventListener("input", function(){
+                        let opbal=parseFloat(this.value) || 0;
+                        document.getElementById("currbal").value=opbal.toFixed(2);
+                    });
+                </script>
             </table><br>
             <div class="buttons">
                 <button type="submit" name="add">ADD</button>

@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
     $net_amt_w = $_POST['netinw'];
     $due_date_bill = $_POST['du-date'];
     $color_ad = $_POST['col-ad'];
-    $curr_bal = floatval($_POST['cur-bal-rs']);
+    $curr_bal = floatval($_POST['cur-bal-rs']) + floatval($_POST['net-amt-rs']);
  
     $stmt = $conn->prepare("INSERT INTO bills (
         bill_no, bill_date, ac_no, ac_name, cli_name, mob_no, cap, r_o_no, r_o_date, pub_date, page,
@@ -61,8 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
         igst, igst_rs, ad_rep, net_amt, net_amt_w, due_date_bill, color_ad, curr_bal
     ) VALUES (
         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
-    )");   
-
+    )");
     $stmt->bind_param(
         "sssssssssssssssddsddddddddddddddddsdssd",
         $bill_no, $bill_date, $ac_no, $ac_name, $cli_name, $mob_no, $cap, $r_o_no, $r_o_date, $pub_date,
@@ -72,6 +71,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
         $color_ad, $curr_bal
     );
     if ($stmt->execute()) {
+        $conn->query("UPDATE ad_mast SET cur_bal = $curr_bal WHERE ac_no = '$ac_no'");
+        $conn->query("UPDATE dbt SET current_balance = $curr_bal WHERE ac_no = '$ac_no'");
+        $conn->query("UPDATE cre SET current_balance = $curr_bal WHERE ac_no = '$ac_no'");
+        $conn->query("UPDATE rct SET current_balance = $curr_bal WHERE ac_no = '$ac_no'");
         echo "<script>alert('✅ Bill record inserted successfully!');</script>";
         echo "<script>window.location.href = window.location.pathname;</script>";
     } else {
@@ -406,7 +409,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
             <td><label for="col-pos-char">Sp.Pos Charges(%):</label></td>
             <td><input id="col-pos-char" type="number" name="col-pos-char" value="0.00" tabindex="17"></td>
             <td><label for="col-rs">Rs:</label></td>
-            <td><input id="col-rs" name="col-rs" type="number" value="0.00"></td>
+            <td><input id="col-rs" name="col-rs" type="number" step="0.01" value="0.00"></td>
         </tr>
         <tr>
             <td><label for="sq-cms">Sq.Cms.:</label></td>
@@ -414,7 +417,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
             <td><label for="col-char">Color Charges(%):</label></td>
             <td><input id="col-char" name="col-char" type="number" value="0.00" tabindex="18"></td>
             <td><label for="sq-rs">Rs:</label></td>
-            <td><input id="sq-rs" name="sq-col-rs" type="number" value="0.00"></td>
+            <td><input id="sq-rs" name="sq-col-rs" type="number" step="0.01" value="0.00"></td>
         </tr>
         <tr>
             <td><label for="tocms">Total Cms.:</label></td>
@@ -438,7 +441,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
             <td><label for=""></label></td>
             <td><input type="hidden"></td>
             <td><label for="gr-rs">Amt. Bef Tax Rs:</label></td>
-            <td><input id="gr-rs" name="gr-rs" type="number" value="0.00"></td>
+            <td><input id="gr-rs" name="gr-rs" type="number" step="0.01" value="0.00"></td>
         </tr>
         <tr>
             <td><label for="gross-amt">Gross Amt.:</label></td>
@@ -550,7 +553,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
                 document.getElementById('net-amt').value = netAmt.toFixed(2);
                 document.getElementById('net-in-w').value = toWords(Math.round(netAmt));
             }
-
             document.getElementById('cgst').addEventListener('input', function () {
                 if (parseFloat(this.value) > 0) {
                     document.getElementById('sgst').value = this.value;

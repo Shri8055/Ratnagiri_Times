@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $bank_bran=$_POST['bank-branc'] ?? '';
     $narr=$_POST['narr'];
     $cash_depo=$_POST['cash-de-in'];
-    $current_bal=$_POST['curr-bal'];
+    $current_bal=$_POST['curr-bal'] - $_POST['cr-nt-amt'];
     $sql = "INSERT INTO cre (
         cre_no, credit_date, ac_no, ac_name, amount, payment_type,
         cheque_no, cheque_date, bank_name, bank_branch,
@@ -43,6 +43,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       $current_bal
     );
     if (mysqli_stmt_execute($stmt)) {
+        $conn->query("UPDATE ad_mast SET cur_bal = $current_bal WHERE ac_no = '$ac_no'");
+        $conn->query("UPDATE dbt SET current_balance = $current_bal WHERE ac_no = '$ac_no'");
+        $conn->query("UPDATE rct SET current_balance = $current_bal WHERE ac_no = '$ac_no'");
+        $conn->query("UPDATE bills SET curr_bal = $current_bal WHERE ac_no = '$ac_no'");
       echo "<script>alert('✅ Credit Note added successfully!');</script>";
       echo "<script>window.location.href = window.location.pathname;</script>";
     } else {
