@@ -104,7 +104,7 @@ $editions = $conn->query("SELECT * FROM ad");
         </div>
         <a href="#">Monthly Reports</a>
         <a href="#">Outstanding Statements</a>
-        <a href="#">Ledger</a>
+        <a href="ledger.php">Ledger</a>
         <a href="#">Receipts, Credit & Debit Notes</a>
       </div>
     </div>

@@ -29,12 +29,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $cgst = $_POST['cgst'];
         $sgst = $_POST['sgst'];
         $igst = $_POST['igst'];
-        $free_copies = $_POST['copies'];
-        $copies = $_POST['copi'];
+        $free_copies = $_POST['copies'] ?? '';
+        $copies = $_POST['copi'] ?? '';
         $commission = $_POST['comm'];
         $op_dep = $_POST['opdepo'];
-        $out_lim = $_POST['out_lim'];
-        $out_lim_rs = $_POST['out_lim_rs'];
+        $out_lim = $_POST['out_lim'] ?? '';
+        $out_lim_rs = $_POST['out_lim_rs'] ?? '';
         $tot_dep = $_POST['totdep'];
         $op_bal = $_POST['balance'];
         $status = $_POST['status'];
@@ -158,7 +158,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
         <a href="#">Monthly Reports</a>
         <a href="#">Outstanding Statements</a>
-        <a href="#">Ledger</a>
+        <a href="ledger.php">Ledger</a>
         <a href="#">Receipts, Credit & Debit Notes</a>
       </div>
     </div>

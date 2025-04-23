@@ -17,7 +17,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $bank_bran=$_POST['bank-branc'] ?? '';
     $narr=$_POST['narr'];
     $cash_depo=$_POST['cash-de-in'];
-    $current_bal=$_POST['curr-bal'] - $_POST['r-amt'];
+    $current_bal=floatval($_POST['curr-bal']) - floatval($_POST['r-amt']);
+
+    $l_type = 'Receipt';
+    $l_date = $rct_date;
+    $l_billno = $rct_no;
+    $l_ac_no = $ac_no;
+    $l_ac_name = $ac_name;
+    $l_narr = $narr;
+    $l_ramt = $rct_amt;
     $sql = "INSERT INTO rct (
         rct_no, receipt_date, ac_no, ac_name, amount, payment_type,
         cheque_no, cheque_date, bank_name, bank_branch,
@@ -47,6 +55,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $conn->query("UPDATE dbt SET current_balance = $current_bal WHERE ac_no = '$ac_no'");
         $conn->query("UPDATE cre SET current_balance = $current_bal WHERE ac_no = '$ac_no'");
         $conn->query("UPDATE bills SET curr_bal = $current_bal WHERE ac_no = '$ac_no'");
+        $stmt = $conn->prepare("INSERT INTO ledger (l_type, l_date, l_billno, l_ac_no, ac_name, l_narr, l_ramt) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssssd", $l_type, $l_date, $l_billno, $l_ac_no, $l_ac_name, $l_narr, $l_ramt);
+        
+        if (!$stmt->execute()) {
+            echo "<script>alert('⚠️ Ledger insert error: " . addslashes($stmt->error) . "');</script>";
+        }
       echo "<script>alert('✅ Receipt added successfully!');</script>";
       echo "<script>window.location.href = window.location.pathname;</script>";
     } else {
@@ -129,7 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
         <a href="#">Monthly Reports</a>
         <a href="#">Outstanding Statements</a>
-        <a href="#">Ledger</a>
+        <a href="ledger.php">Ledger</a>
         <a href="#">Receipts, Credit & Debit Notes</a>
       </div>
     </div>

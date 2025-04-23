@@ -4,8 +4,9 @@ $conn = mysqli_connect('localhost', 'root', '', 'pmedia', 4306);
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
-$ed=$conn->query("SELECT * FROM ed");
-$ad=$conn->query("SELECT * FROM ad");
+
+$ed = $conn->query("SELECT * FROM ed");
+$ad = $conn->query("SELECT * FROM ad");
 
 $bl_no_query = "SELECT MAX(bill_no) AS max_bl_no FROM bills";
 $bl_no_result = $conn->query($bl_no_query);
@@ -14,6 +15,7 @@ $bill_no = $bl_no_row['max_bl_no'] + 1;
 if (!$bill_no) $bill_no = 1;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
+    // POST variables
     $bill_no = $_POST['bill-no'];
     $bill_date = $_POST['bill-date'];
     $ac_no = $_POST['ac-no'];
@@ -53,7 +55,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
     $due_date_bill = $_POST['du-date'];
     $color_ad = $_POST['col-ad'];
     $curr_bal = floatval($_POST['cur-bal-rs']) + floatval($_POST['net-amt-rs']);
- 
+
+    // Ledger values
+    $l_type = 'Bill';
+    $l_date = $bill_date;
+    $l_billno = $bill_no;
+    $l_ac_no = $ac_no;
+    $l_ac_name = $ac_name;
+    $l_narr = $cli_name . ' ' . $cap;
+    $l_damt = $net_amt;
+
+    // Check if account name matches
+    $chkname_query = "SELECT ac_name FROM ad_mast WHERE ac_no = ?";
+    $stmt = $conn->prepare($chkname_query);
+    $stmt->bind_param("s", $ac_no);
+    $stmt->execute();
+    $stmt->bind_result($db_ac_name);
+    $stmt->fetch();
+    $stmt->close();
+
+    if (strcasecmp(trim($db_ac_name), trim($ac_name)) !== 0) {
+        echo "<script>alert('⚠ Account name does not match the account number!');</script>";
+        return;
+    }
+
+    // Insert into bills table
     $stmt = $conn->prepare("INSERT INTO bills (
         bill_no, bill_date, ac_no, ac_name, cli_name, mob_no, cap, r_o_no, r_o_date, pub_date, page,
         ed_type, ad_type, col, sp_pos_char, sp_pos_rs, sq_cm, colr_char, colr_char_rs, tot_cm, tot_amt,
@@ -70,11 +96,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
         $cgst_rs, $sgst, $sgst_rs, $igst, $igst_rs, $ad_rep, $net_amt, $net_amt_w, $due_date_bill,
         $color_ad, $curr_bal
     );
+
     if ($stmt->execute()) {
+        // Update current balance in related tables
         $conn->query("UPDATE ad_mast SET cur_bal = $curr_bal WHERE ac_no = '$ac_no'");
         $conn->query("UPDATE dbt SET current_balance = $curr_bal WHERE ac_no = '$ac_no'");
         $conn->query("UPDATE cre SET current_balance = $curr_bal WHERE ac_no = '$ac_no'");
         $conn->query("UPDATE rct SET current_balance = $curr_bal WHERE ac_no = '$ac_no'");
+
+        // Insert into ledger
+        $stmt = $conn->prepare("INSERT INTO ledger (l_type, l_date, l_billno, l_ac_no, ac_name, l_narr, l_damt) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssssd", $l_type, $l_date, $l_billno, $l_ac_no, $l_ac_name, $l_narr, $l_damt);
+
+        if (!$stmt->execute()) {
+            echo "<script>alert('⚠️ Ledger insert error: " . addslashes($stmt->error) . "');</script>";
+        }
+
         echo "<script>alert('✅ Bill record inserted successfully!');</script>";
         echo "<script>window.location.href = window.location.pathname;</script>";
     } else {
@@ -83,6 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
     $stmt->close();
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -153,7 +191,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
         </div>
         <a href="#">Monthly Reports</a>
         <a href="#">Outstanding Statements</a>
-        <a href="#">Ledger</a>
+        <a href="ledger.php">Ledger</a>
         <a href="#">Receipts, Credit & Debit Notes</a>
       </div>
     </div>

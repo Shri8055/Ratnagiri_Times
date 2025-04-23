@@ -62,7 +62,7 @@
         </div>
         <a href="#">Monthly Reports</a><hr>
         <a href="#">Outstanding Statements</a><hr>
-        <a href="#">Ledger</a><hr>
+        <a href="ledger.php">Ledger</a><hr>
         <a href="#">Receipts, Credit & Debit Notes</a><hr>
       </div>
     </div>
