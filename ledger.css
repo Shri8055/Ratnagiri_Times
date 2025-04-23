@@ -32,9 +32,9 @@ button:hover {
 .td{
   text-align: end;
 }
-/* .inr-td{
-  width: 60%;
-} */
+.inr-td{
+  width: 85%;
+}
 
 
 .main {

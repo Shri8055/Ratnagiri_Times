@@ -165,7 +165,7 @@ $result = $stmt->get_result();
     <form method="GET">
         <label>Account No: <input type="text" name="ac_no" value="<?= $_GET['ac_no'] ?? '' ?>"></label>
         <label>Type: 
-            <select name="l_type">
+            <select name="l_type" onchange="this.form.submit()">
                 <option value="">All</option>
                 <option value="Bill" <?= (@$_GET['l_type'] == 'Bill') ? 'selected' : '' ?>>Bill</option>
                 <option value="Receipt" <?= (@$_GET['l_type'] == 'Receipt') ? 'selected' : '' ?>>Receipt</option>
@@ -177,7 +177,7 @@ $result = $stmt->get_result();
         <label>To: <input type="date" name="date_to" value="<?= $_GET['date_to'] ?? '' ?>"></label>
         <label>Max Amount: <input type="number" step="0.01" name="max_amt" value="<?= $_GET['max_amt'] ?? '' ?>"></label>
         <button type="submit">Filter</button>
-        <button type="button" onclick="previewPDF()">🖨 Print</button>
+        <button type="button" onclick="previewPDF()">Print 🖨️</button>
         <style>
           #pdfWrapper {
               font-size: 14px;
@@ -240,8 +240,8 @@ $result = $stmt->get_result();
                 <th>Ac No</th>
                 <th>Ac Name</th>
                 <th>Narration</th>
-                <th>Debit Amount</th>
-                <th>Credit Amount</th>
+                <th>Debit Amt</th>
+                <th>Credit Amt</th>
                 <th>Current Bal</th>
             </tr>
         </thead>
@@ -255,9 +255,9 @@ $result = $stmt->get_result();
                     <td><?= $row['l_ac_no'] ?></td>
                     <td><?= $row['ac_name'] ?></td>
                     <td><?= $row['l_narr'] ?></td>
-                    <td class="td" style="width: 8.5%;"><div class="inr-td"><?= number_format($row['l_damt'], 2) ?></div></td>
-                    <td class="td" style="width: 8.5%;"><div class="inr-td"><?= number_format($row['l_ramt'], 2) ?></div></td>
-                    <td class="td" style="width: 8.5%;"><div class="inr-td"><?= number_format($row['l_ramt'], 2) ?></div></td>
+                    <td class="td" style="width: 7.5%;"><div class="inr-td"><?= number_format($row['l_damt'], 2) ?></div></td>
+                    <td class="td" style="width: 7.5%;"><div class="inr-td"><?= number_format($row['l_ramt'], 2) ?></div></td>
+                    <td class="td" style="width: 7.5%;"><div class="inr-td"><?= number_format($row['curr_bal'], 2) ?></div></td>
                 </tr>
             <?php endwhile; ?>
         </tbody>

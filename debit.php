@@ -56,6 +56,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $conn->query("UPDATE cre SET current_balance = $current_bal WHERE ac_no = '$ac_no'");
         $conn->query("UPDATE bills SET curr_bal = $current_bal WHERE ac_no = '$ac_no'");
         $conn->query("UPDATE rct SET current_balance = $current_bal WHERE ac_no = '$ac_no'");
+        $conn->query("UPDATE ledger SET curr_bal = $current_bal WHERE l_ac_no = '$ac_no'");
+
         $stmt = $conn->prepare("INSERT INTO ledger (l_type, l_date, l_billno, l_ac_no, ac_name, l_narr, l_damt) VALUES (?, ?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("ssssssd", $l_type, $l_date, $l_billno, $l_ac_no, $l_ac_name, $l_narr, $l_damt);
         
@@ -314,7 +316,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <td><label for=""></label></td>
                 <td><input type="hidden"></td>
                 <td><label for="dr-nt-amt">Dr. Note Amt.:</label></td>
-                <td><input id="dr-nt-amt" name="dr-nt-amt" type="text"tabindex="4" required></td>
+                <td><input id="dr-nt-amt" name="dr-nt-amt" type="number" min="1" step="0.01" tabindex="4" required></td>
+                <span id="dbt-amt-error" style="color: red; font-size: 14px;"></span>
             </tr>
             <tr>
                 <td><label for="pay-ty">Payment Type:</label></td>
@@ -361,6 +364,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <td><label for="curr-bal">Current Bal.:</label></td>
                 <td><input id="curr-bal" name="curr-bal" type="text" value="0.00"></td>
             </tr>
+            <script>
+              let dbtInput = document.getElementById("dr-nt-amt");
+                let currInput = document.getElementById("curr-bal");
+                let dbtError = document.getElementById("dbt-amt-error");
+                dbtInput.addEventListener("blur", function() {
+                  const debit = parseFloat(dbtInput.value) || 0;
+                  const current = parseFloat(currInput.value) || 0;
+                  if(debit > 0){
+                    if (debit > current) {
+                        dbtError.textContent = " Debit amount should be less than CURRENT BALANCE ! ";
+                    } else {
+                        dbtError.textContent = "";
+                    }
+                  }
+                  else{
+                    dbtError.textContent = " Debit amount should be greater than 0 ! ";
+                  }
+                });
+            </script>
         </table><br>
         <script>
           const paymentType = document.getElementById("pay-ty");
@@ -480,7 +502,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 isValid = false;
               }
             }
-
+            let dbtInput = document.getElementById("dr-nt-amt");
+            let currInput = document.getElementById("curr-bal");
+            let dbtError = document.getElementById("dbt-amt-error");
+            const debit = parseFloat(dbtInput.value) || 0;
+            const current = parseFloat(currInput.value) || 0;
+            if(debit > 0){
+              if (debit > current) {
+                dbtError.textContent = " Debit amount should be less than CURRENT BALANCE ! ";
+                isValid = false;
+              }
+            }else{
+              dbtError.textContent = " Debit amount should be greater than 0 ! ";
+            }
             // Prevent form submission if invalid
             if (!isValid) {
               event.preventDefault();

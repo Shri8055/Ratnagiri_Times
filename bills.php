@@ -103,6 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
         $conn->query("UPDATE dbt SET current_balance = $curr_bal WHERE ac_no = '$ac_no'");
         $conn->query("UPDATE cre SET current_balance = $curr_bal WHERE ac_no = '$ac_no'");
         $conn->query("UPDATE rct SET current_balance = $curr_bal WHERE ac_no = '$ac_no'");
+        $conn->query("UPDATE ledger SET curr_bal = $curr_bal WHERE l_ac_no = '$ac_no'");
 
         // Insert into ledger
         $stmt = $conn->prepare("INSERT INTO ledger (l_type, l_date, l_billno, l_ac_no, ac_name, l_narr, l_damt) VALUES (?, ?, ?, ?, ?, ?, ?)");
@@ -456,14 +457,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
             <td><input id="col-char" name="col-char" type="number" value="0.00" tabindex="18"></td>
             <td><label for="sq-rs">Rs:</label></td>
             <td><input id="sq-rs" name="sq-col-rs" type="number" step="0.01" value="0.00"></td>
+            <span id="sq-error" style="color: red; font-size: 14px;"></span>
         </tr>
+            <script>
+                let sqInput = document.getElementById("sq-cms");
+                let sqError = document.getElementById("sq-error")
+                sqInput.addEventListener("blur", function() {
+                    if (this.value < 1) {
+                        sqError.textContent = " Sq cms should be greater then 0 ! ";
+                    } else {
+                        sqError.textContent = "";
+                    }
+                });
+            </script>
         <tr>
             <td><label for="tocms">Total Cms.:</label></td>
             <td><input id="tocms" name="tocms" type="number" value="0.00" tabindex="14" readonly></td>
             <td><label for=""></label></td>
             <td><input type="hidden"></td>
             <td><label for="to-rs">Total Amt. Rs:</label></td>
-            <td><input id="to-rs" name="tot-col-rs" type="number" value="0.00"></td>
+            <td><input id="to-rs" name="tot-col-rs" type="number" step="0.01" value="0.00"></td>
         </tr>
         <tr>
             <td><label for="ins">Inserts:</label></td>
@@ -480,7 +493,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
             <td><input type="hidden"></td>
             <td><label for="gr-rs">Amt. Bef Tax Rs:</label></td>
             <td><input id="gr-rs" name="gr-rs" type="number" step="0.01" value="0.00"></td>
+            <span id="rate-error" style="color: red; font-size: 14px;"></span>
         </tr>
+            <script>
+                let rateInput = document.getElementById("rate");
+                let rError = document.getElementById("rate-error")
+                rateInput.addEventListener("blur", function() {
+                    if (this.value < 1) {
+                        rError.textContent = " Rate should be greater then 0 ! ";
+                    } else {
+                        rError.textContent = "";
+                        updateAll();
+                    }
+                });
+            </script>
         <tr>
             <td><label for="gross-amt">Gross Amt.:</label></td>
             <td><input id="gross-amt" name="gross-amt" type="number" value="0.00"></td>
@@ -683,6 +709,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
         document.getElementById("form").addEventListener("submit", function(event) {
         let mobInput = document.getElementById("CmobNo");
         let mobError = document.getElementById("mob-no-error");
+        let rateInput = document.getElementById("rate");
+        let rError = document.getElementById("rate-error")
+        let sqInput = document.getElementById("sq-cms");
+        let sqError = document.getElementById("sq-error")
+        let netamt = document.getElementById("net-amt");
         let isValid = true;
         if(mobInput.value.length!=''){
             if (mobInput.value.length !== 10) {
@@ -691,6 +722,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
             }
         }else {
             mobError.textContent = "";
+        }
+        if (rateInput.value < 1) {
+            rError.textContent = " Rate should be greater than 0 !";
+            isValid = false;
+        }else {
+            rError.textContent = "";
+        }
+        if (sqInput.value < 1) {
+            sqError.textContent = " Sq cms should be greater than 0 !";
+            isValid = false;
+        }else {
+            sqError.textContent = "";
+        }
+        if(netamt.value < 1){
+            alert("✋ Net Amt can't be 0 \n Enter rate Rs");
+            isValid = false;
         }
         if (!isValid) {
             event.preventDefault();

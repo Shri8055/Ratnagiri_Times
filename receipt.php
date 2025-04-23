@@ -55,6 +55,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $conn->query("UPDATE dbt SET current_balance = $current_bal WHERE ac_no = '$ac_no'");
         $conn->query("UPDATE cre SET current_balance = $current_bal WHERE ac_no = '$ac_no'");
         $conn->query("UPDATE bills SET curr_bal = $current_bal WHERE ac_no = '$ac_no'");
+        $conn->query("UPDATE ledger SET curr_bal = $current_bal WHERE l_ac_no = '$ac_no'");
+
         $stmt = $conn->prepare("INSERT INTO ledger (l_type, l_date, l_billno, l_ac_no, ac_name, l_narr, l_ramt) VALUES (?, ?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("ssssssd", $l_type, $l_date, $l_billno, $l_ac_no, $l_ac_name, $l_narr, $l_ramt);
         
@@ -320,7 +322,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <td><label for=""></label></td>
                 <td><input type="hidden"></td>
                 <td><label for="r-amt">Receipt Amt.:</label></td>
-                <td><input id="r-amt" name="r-amt" type="text" tabindex="4" required></td>
+                <td><input id="r-amt" name="r-amt" type="number" min="0" step="0.01" tabindex="4" required></td>
+                <span id="rct-amt-error" style="color: red; font-size: 14px;"></span>
             </tr>
             <tr>
                 <td><label for="pay-ty">Payment Type:</label></td>
@@ -367,6 +370,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <td><label for="curr-bal">Current Bal.:</label></td>
                 <td><input id="curr-bal" name="curr-bal" type="text" value="0.00"></td>
             </tr>
+            <script>
+                let rctInput = document.getElementById("r-amt");
+                let currInput = document.getElementById("curr-bal");
+                let rctError = document.getElementById("rct-amt-error");
+                rctInput.addEventListener("blur", function() {
+                  const receipt = parseFloat(rctInput.value) || 0;
+                  const current = parseFloat(currInput.value) || 0;
+                  if(receipt > 0){
+                    if (receipt > current) {
+                        rctError.textContent = " Receipt amount should be less than CURRENT BALANCE ! ";
+                    } else {
+                        rctError.textContent = "";
+                    }
+                  }
+                  else{
+                    rctError.textContent = " Receipt amount should be greater than 0 ! ";
+                  }
+                });
+            </script>
         </table><br>
         <script>
           const paymentType = document.getElementById("pay-ty");
@@ -486,7 +508,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 isValid = false;
               }
             }
-
+            let rctInput = document.getElementById("r-amt");
+            let currInput = document.getElementById("curr-bal");
+            let rctError = document.getElementById("rct-amt-error");
+            const receipt = parseFloat(rctInput.value) || 0;
+            const current = parseFloat(currInput.value) || 0;
+            if(receipt > 0){
+              if (receipt > current) {
+                rctError.textContent = " Receipt amount should be less than CURRENT BALANCE ! ";
+                isValid = false;
+              }
+            }else{
+              rctError.textContent = " Receipt amount should be greater than 0 ! ";
+            }
             // Prevent form submission if invalid
             if (!isValid) {
               event.preventDefault();

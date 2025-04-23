@@ -56,6 +56,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $conn->query("UPDATE dbt SET current_balance = $current_bal WHERE ac_no = '$ac_no'");
         $conn->query("UPDATE rct SET current_balance = $current_bal WHERE ac_no = '$ac_no'");
         $conn->query("UPDATE bills SET curr_bal = $current_bal WHERE ac_no = '$ac_no'");
+        $conn->query("UPDATE ledger SET curr_bal = $current_bal WHERE l_ac_no = '$ac_no'");
+
         $stmt = $conn->prepare("INSERT INTO ledger (l_type, l_date, l_billno, l_ac_no, ac_name, l_narr, l_ramt) VALUES (?, ?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("ssssssd", $l_type, $l_date, $l_billno, $l_ac_no, $l_ac_name, $l_narr, $l_ramt);
         
@@ -314,7 +316,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <td><label for=""></label></td>
                 <td><input type="hidden"></td>
                 <td><label for="cr-nt-amt">Cr. Note Amt.:</label></td>
-                <td><input id="cr-nt-amt" name="cr-nt-amt" type="text"tabindex="4" required></td>
+                <td><input id="cr-nt-amt" name="cr-nt-amt" type="number" min="1" step="0.01" tabindex="4" required></td>
+                <span id="cre-amt-error" style="color: red; font-size: 14px;"></span>
             </tr>
             <tr>
                 <td><label for="pay-ty">Payment Type:</label></td>
@@ -361,6 +364,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <td><label for="curr-bal">Current Bal.:</label></td>
                 <td><input id="curr-bal" name="curr-bal" type="text" value="0.00"></td>
             </tr>
+            <script>
+              let creInput = document.getElementById("cr-nt-amt");
+                let currInput = document.getElementById("curr-bal");
+                let creError = document.getElementById("cre-amt-error");
+                creInput.addEventListener("blur", function() {
+                  const credit = parseFloat(creInput.value) || 0;
+                  const current = parseFloat(currInput.value) || 0;
+                  if(credit > 0){
+                    if (credit > current) {
+                        creError.textContent = " Credit amount should be less than CURRENT BALANCE ! ";
+                    } else {
+                        creError.textContent = "";
+                    }
+                  }
+                  else{
+                    creError.textContent = " Credit amount should be greater than 0 ! ";
+                  }
+                });
+            </script>
         </table><br>
         <script>
           const paymentType = document.getElementById("pay-ty");
@@ -479,7 +501,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 isValid = false;
               }
             }
-
+            let creInput = document.getElementById("cr-nt-amt");
+            let currInput = document.getElementById("curr-bal");
+            let creError = document.getElementById("cre-amt-error");
+            const credit = parseFloat(creInput.value) || 0;
+            const current = parseFloat(currInput.value) || 0;
+            if(credit > 0){
+              if (credit > current) {
+                creError.textContent = " Credit amount should be less than CURRENT BALANCE ! ";
+                isValid = false;
+              }
+            }else{
+              creError.textContent = " Credit amount should be greater than 0 ! ";
+            }
             if (!isValid) {
               event.preventDefault();
             }
