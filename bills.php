@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
     $curr_bal = floatval($_POST['cur-bal-rs']) + floatval($_POST['net-amt-rs']);
 
     // Ledger values
-    $l_type = 'Bill';
+    $l_type = 'BL';
     $l_date = $bill_date;
     $l_billno = $bill_no;
     $l_ac_no = $ac_no;
@@ -89,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
     )");
     $stmt->bind_param(
-        "sssssssssssssssddsddddddddddddddddsdssd",
+        "sssssssssssssssddsdddddddddddddddssdssd",
         $bill_no, $bill_date, $ac_no, $ac_name, $cli_name, $mob_no, $cap, $r_o_no, $r_o_date, $pub_date,
         $page, $ed_type, $ad_type, $column, $sp_pos_char, $sp_pos_rs, $sq_cm, $colr_char, $colr_char_rs,
         $tot_cm, $tot_amt, $inserts, $less_com, $less_com_rs, $rate, $amt_bef_tax, $gross_amt, $cgst,

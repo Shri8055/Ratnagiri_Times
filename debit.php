@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $cash_depo=$_POST['cash-de-in'];
     $current_bal=floatval($_POST['curr-bal']) + floatval($_POST['dr-nt-amt']);
 
-    $l_type = 'Debit';
+    $l_type = 'DR';
     $l_date = $dbt_date;
     $l_billno = $dbt_no;
     $l_ac_no = $ac_no;

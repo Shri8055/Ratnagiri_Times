@@ -1,57 +1,33 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ratnagiri Times | LEDGER</title>
-    <link rel="stylesheet" href="ledger.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Poppins:wght@100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-</head>
-<body>
-    
-</body>
-</html> -->
-
 <?php
-$conn = new mysqli("localhost", "root", "", "pmedia", 4306);
+$conn = new mysqli('localhost','root','','pmedia',4306);
 
-$where = [];
+$where  = [];
 $params = [];
 
-// Apply filters if submitted
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    if (!empty($_GET['ac_no'])) {
-        $where[] = "l_ac_no = ?";
-        $params[] = $_GET['ac_no'];
-    }
-    if (!empty($_GET['l_type'])) {
-        $where[] = "l_type = ?";
-        $params[] = $_GET['l_type'];
-    }
-    if (!empty($_GET['date_from']) && !empty($_GET['date_to'])) {
-        $where[] = "l_date BETWEEN ? AND ?";
-        $params[] = $_GET['date_from'];
-        $params[] = $_GET['date_to'];
-    }
-    if (!empty($_GET['max_amt'])) {
-        $where[] = "l_damt <= ?";
-        $params[] = $_GET['max_amt'];
-    }
+$in = fn($k)=>($_GET[$k] ?? '')!=='';
+
+if ($in('ac_no'))      { $where[]='l_ac_no = ?';            $params[]=$_GET['ac_no']; }
+if ($in('l_type'))     { $where[]='l_type  = ?';            $params[]=$_GET['l_type']; }
+if ($in('date_from') && $in('date_to')){
+    $where[]='l_date BETWEEN ? AND ?';        $params[]=$_GET['date_from']; $params[]=$_GET['date_to'];
+}
+if ($in('max_amt'))    { $where[]='l_damt <= ?';            $params[]=$_GET['max_amt']; }
+
+$balMap = [];
+$balRes = $conn->query("SELECT ac_no , cur_bal FROM ad_mast");
+while($b=$balRes->fetch_assoc()){ $balMap[ $b['ac_no'] ] = $b['cur_bal']; }
+
+$currBal = 0.00;
+if ($in('ac_no')){
+    $balStmt = $conn->prepare("SELECT cur_bal FROM ad_mast WHERE ac_no = ? LIMIT 1");
+    $balStmt->bind_param("s", $_GET['ac_no']);  $balStmt->execute();
+    $balStmt->bind_result($currBal);            $balStmt->fetch();   $balStmt->close();
 }
 
-$sql = "SELECT * FROM ledger";
-if ($where) {
-    $sql .= " WHERE " . implode(" AND ", $where);
-}
-
-$stmt = $conn->prepare($sql);
-if ($params) {
-    $types = str_repeat("s", count($params));
-    $stmt->bind_param($types, ...$params);
-}
-$stmt->execute();
-$result = $stmt->get_result();
+$sql = "SELECT * FROM ledger".($where ? " WHERE ".implode(' AND ',$where) : '');
+$stmt= $conn->prepare($sql);
+if($params){ $stmt->bind_param(str_repeat('s',count($params)), ...$params); }
+$stmt->execute(); $rows=$stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -62,6 +38,14 @@ $result = $stmt->get_result();
     <link rel="stylesheet" href="ledger.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Poppins:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"/>
+    <style>
+
+td:nth-child(8),td:nth-child(9),th:nth-child(8),th:nth-child(9){text-align:end}
+
+#balTip{position:fixed;display:none;padding:6px 8px;background:#333;color:#fff;
+        font-size:12px;border-radius:6px;pointer-events:none;z-index:9999}
+</style>
 </head>
 <body>
 <div class="main">
@@ -142,138 +126,157 @@ $result = $stmt->get_result();
   </div>
 </div>
 
-<!-- Toggle Button (outside sidebar) -->
 <button class="toggle-btn" onclick="toggleSidebar(this)">▶</button>
 
-<!-- Script -->
 <script>
   function toggleSidebar(btn) {
     const sidebar = document.getElementById('sidebar');
     sidebar.classList.toggle('expanded');
     btn.textContent = sidebar.classList.contains('expanded') ? '◀' : '▶';
 
-    // Toggle visibility of action buttons
     const buttons = document.querySelectorAll('.action-button');
     buttons.forEach(button => {
       button.classList.toggle('hide-buttons', !sidebar.classList.contains('expanded'));
     });
   }
 </script>
-<div id="ledgerContent">
-    <h3 style="text-align: center; margin-top: 40px;">Ledger Report</h3><br>
-    <div style="padding: 0 40px">
-    <form method="GET">
-        <label>Account No: <input type="text" name="ac_no" value="<?= $_GET['ac_no'] ?? '' ?>"></label>
-        <label>Type: 
-            <select name="l_type" onchange="this.form.submit()">
-                <option value="">All</option>
-                <option value="Bill" <?= (@$_GET['l_type'] == 'Bill') ? 'selected' : '' ?>>Bill</option>
-                <option value="Receipt" <?= (@$_GET['l_type'] == 'Receipt') ? 'selected' : '' ?>>Receipt</option>
-                <option value="Debit" <?= (@$_GET['l_type'] == 'Debit') ? 'selected' : '' ?>>Debit</option>
-                <option value="Credit" <?= (@$_GET['l_type'] == 'Credit') ? 'selected' : '' ?>>Credit</option>
-            </select>
-        </label>
-        <label>Date From: <input type="date" name="date_from" value="<?= $_GET['date_from'] ?? '' ?>"></label>
-        <label>To: <input type="date" name="date_to" value="<?= $_GET['date_to'] ?? '' ?>"></label>
-        <label>Max Amount: <input type="number" step="0.01" name="max_amt" value="<?= $_GET['max_amt'] ?? '' ?>"></label>
-        <button type="submit">Filter</button>
-        <button type="button" onclick="previewPDF()">Print 🖨️</button>
+<h3 style="text-align:center;margin:25px 0 15px">Ledger Report</h3>
+
+<div style="padding:0 40px">
+
+<form method="get" id="fltForm" style="margin-bottom:10px">
+  <label>Ac No : <input name="ac_no" value="<?=htmlspecialchars($_GET['ac_no']??'')?>"></label>
+  <label>Type :
+     <select name="l_type" onchange="document.getElementById('fltForm').submit()">
+       <?php
+         $types=[''=>'All','Bill'=>'Bill','Receipt'=>'Receipt','Debit'=>'Debit','Credit'=>'Credit'];
+         foreach($types as $v=>$t){
+             $sel=(@$_GET['l_type']==$v)?'selected':'';
+             echo "<option value='$v' $sel>$t</option>";
+         }
+       ?>
+     </select>
+  </label>
+  <label>From : <input type="date" name="date_from" value="<?= $_GET['date_from']??''?>"></label>
+  <label>To : <input type="date" name="date_to"   value="<?= $_GET['date_to']??''?>"></label>
+  <label>Max Amt : <input type="number" step="0.01" name="max_amt" value="<?= $_GET['max_amt']??''?>"></label>
+  <button type="submit">Filter</button>
+  <button type="button" id="pdfBtn">Print 🖨️</button>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+document.getElementById('pdfBtn').addEventListener('click', () => {
+
+    const tableClone = document.getElementById('ledgerTable').cloneNode(true);
+    tableClone.removeAttribute('id');
+
+    const wrapper = document.createElement('div');
+    wrapper.innerHTML = `
         <style>
-          #pdfWrapper {
-              font-size: 14px;
-              padding: 10px 20px;
-          }
-          #pdfWrapper h3 {
-              margin-bottom: 20px;
-          }
-          #pdfWrapper table {
-              width: 100%;
-              border-collapse: collapse;
-              font-size: 14px;
-          }
-          #pdfWrapper th, #pdfWrapper td {
-              text-align: center;
-          }
-          #pdfWrapper td:nth-child(8),
-          #pdfWrapper td:nth-child(9),
-          #pdfWrapper td:nth-child(10),
-          #pdfWrapper th:nth-child(8),
-          #pdfWrapper th:nth-child(9),
-          #pdfWrapper th:nth-child(10) {
-              text-align: end;
-          }
+            /* styles applied only inside the PDF */
+            #pdfMini *        { font-size: 9px !important; }  /* << font size here */
+            #pdfMini table    { width:100%; border-collapse:collapse; }
+            #pdfMini th,#pdfMini td{ text-align:center; }
+            #pdfMini td:nth-child(8),
+            #pdfMini td:nth-child(9),
+            #pdfMini th:nth-child(8),
+            #pdfMini th:nth-child(9){ text-align:right; }
         </style>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-        <script>
-          function previewPDF() {
-              const content = document.getElementById('ledgerTable').outerHTML;
+        <div id="pdfMini">
+            <h1 style="font-weight: 700;text-align:center;margin:5px 0">Ratnagiri Times</h1>
+            <p style="text-align:center;margin-bottom:5px">H.O : Times Bhavan, Maruti Lane, Ratnagiri</p>
+            <h3 style="text-align:center;margin-bottom:14px">Ledger Report</h3>
+        </div>
+        <p style="font-size: 6px;text-align:center;margin:5px 0;">Softline Softwares, Kolhapur</p>`;
+    wrapper.querySelector('#pdfMini').appendChild(tableClone);
 
-              const heading = `<h3 style="text-align: center; margin-bottom: 20px;">Ledger Report</h3>`;
+    
+    html2pdf()
+      .from(wrapper)
+      .set({
+          margin: 0,
+          filename: 'Ledger_Report.pdf',
+          image:    { type:'jpeg', quality:0.98 },
+          html2canvas:{ scale: 5, useCORS: true },
+          jsPDF:   { unit:'in', format:'a4', orientation:'portrait' }
+      })
+      .outputPdf('blob')
+      .then(blob => {
+           const url = URL.createObjectURL(blob);
+           window.open(url, '_blank');
+      });
+});
+</script>
 
-              const wrapper = document.createElement('div');
-              wrapper.id = 'pdfWrapper';
-              wrapper.innerHTML = heading + content;
+  <label style="margin-left:20px">Curr Bal :
+    <input class="curr-bal" readonly
+           value="<?=number_format($currBal,2)?>" type="text"
+           style="text-align:end;background:yellow;font-weight:700;width: 250px;">
+  </label>
+</form>
 
-              const opt = {
-                  margin: 0,
-                  filename: 'Ledger_Report.pdf',
-                  image: { type: 'jpeg', quality: 0.98 },
-                  html2canvas: { scale: 2 },
-                  jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' }
-              };
+<table id="ledgerTable" class="display" style="width:100%">
+  <thead>
+    <tr><th>ID</th><th>Type</th><th>Date</th><th>Bill No</th>
+        <th>Ac No</th><th>Ac Name</th><th>Narration</th>
+        <th>Debit Amt</th><th>Credit Amt</th></tr>
+  </thead>
+  <tbody>
+  <?php foreach($rows as $r):
+        $bal = $balMap[$r['l_ac_no']] ?? 0; ?>
+     <tr>
+       <td style="width:40px"><?= $r['l_id'] ?></td>
+       <td><?= $r['l_type'] ?></td>
+       <td><?= date('d-m-Y', strtotime($r['l_date'])) ?></td>
+       <td><?= $r['l_billno']?></td>
+       <td class="ledger-ac" data-bal="<?=number_format($bal,2)?>"><?= $r['l_ac_no']?></td>
+       <td class="ledger-ac" data-bal="<?=number_format($bal,2)?>"><?= htmlspecialchars($r['ac_name'])?></td>
+       <td><?= htmlspecialchars($r['l_narr']) ?></td>
+       <td style="width: 8.5%;"><div class="inr-td"><?= number_format($r['l_damt'],2) ?></div></td>
+       <td style="width: 8.5%;"><div class="inr-td"><?= number_format($r['l_ramt'],2) ?></div></td>
+     </tr>
+  <?php endforeach;?>
+  </tbody>
+</table>
 
-              html2pdf().from(wrapper).set(opt).outputPdf('blob').then(function (pdfBlob) {
-                  const pdfURL = URL.createObjectURL(pdfBlob);
-                  window.open(pdfURL);
-              });
-          }
-          </script>
-    </form>
+</div>
 
-    <table id="ledgerTable" class="display">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Type</th>
-                <th>Date</th>
-                <th>Bill No</th>
-                <th>Ac No</th>
-                <th>Ac Name</th>
-                <th>Narration</th>
-                <th>Debit Amt</th>
-                <th>Credit Amt</th>
-                <th>Current Bal</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php while($row = $result->fetch_assoc()): ?>
-                <tr>
-                    <td><?= $row['l_id'] ?></td>
-                    <td><?= $row['l_type'] ?></td>
-                    <td><?= $row['l_date'] ?></td>
-                    <td><?= $row['l_billno'] ?></td>
-                    <td><?= $row['l_ac_no'] ?></td>
-                    <td><?= $row['ac_name'] ?></td>
-                    <td><?= $row['l_narr'] ?></td>
-                    <td class="td" style="width: 7.5%;"><div class="inr-td"><?= number_format($row['l_damt'], 2) ?></div></td>
-                    <td class="td" style="width: 7.5%;"><div class="inr-td"><?= number_format($row['l_ramt'], 2) ?></div></td>
-                    <td class="td" style="width: 7.5%;"><div class="inr-td"><?= number_format($row['curr_bal'], 2) ?></div></td>
-                </tr>
-            <?php endwhile; ?>
-        </tbody>
-    </table>
-    </div>
-    </div>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('#ledgerTable').DataTable({
-                "paging": false,
-                "ordering": true,
-                "searching": true
-            });
-        });
-    </script>
+<div id="balTip"></div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<script>
+const dt = $('#ledgerTable').DataTable({
+       paging:false, ordering:true, searching:true
+});
+
+const balBox = document.querySelector('.curr-bal'); 
+
+dt.on('draw', () =>{
+   const rows = dt.rows({page:'current', search:'applied'}).nodes();
+   if(balBox.dataset.locked!=='1'){                    
+        if(rows.length===1){
+            const rd = rows[0].children[7].textContent.replace(/,/g,'')*1||0;
+            const rc = rows[0].children[8].textContent.replace(/,/g,'')*1||0;
+            balBox.value = (rc-rd).toFixed(2);
+        }else{
+            balBox.value = parseFloat(balBox.value)||0;
+        }
+   }
+});
+
+const tip = document.getElementById('balTip');
+
+document.getElementById('ledgerTable')
+  .addEventListener('mousemove', e=>{
+      const cell = e.target.closest('.ledger-ac');
+      if(cell){
+          tip.textContent = 'Curr Bal : '+cell.dataset.bal;
+          tip.style.cssText = `display:block;opacity:1;box-shadow: 0px 30px 40px rgba(0, 0, 0, 0.83); border: 4px solid rgba(135, 135, 135, 0.76);top:${e.clientY+15}px;left:${e.clientX+15}px`;
+      }else tip.style.display='none';
+});
+document.getElementById('ledgerTable').addEventListener('mouseleave',()=>tip.style.display='none');
+</script>
 </body>
 </html>

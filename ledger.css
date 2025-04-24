@@ -35,7 +35,20 @@ button:hover {
 .inr-td{
   width: 85%;
 }
-
+.curr-bal{
+  color: red;
+  font-weight: bold;
+  background-color: yellow;
+  text-align: end;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.head{
+  font-size: 14px;
+}
 
 .main {
     display: flex;
