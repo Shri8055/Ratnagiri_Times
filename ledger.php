@@ -185,8 +185,7 @@ document.getElementById('pdfBtn').addEventListener('click', () => {
             <h1 style="font-weight: 700;text-align:center;margin:5px 0">Ratnagiri Times</h1>
             <p style="text-align:center;margin-bottom:5px">H.O : Times Bhavan, Maruti Lane, Ratnagiri</p>
             <h3 style="text-align:center;margin-bottom:14px">Ledger Report</h3>
-        </div>
-        <p style="font-size: 6px;text-align:center;margin:5px 0;">Softline Softwares, Kolhapur</p>`;
+        </div>`;
     wrapper.querySelector('#pdfMini').appendChild(tableClone);
 
     
