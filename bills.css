@@ -319,11 +319,12 @@ body {
   position: absolute;
   left: 100%;
   top: 0;
-  min-width: 200px;
+  min-width: 350px;
   background-color: #d1d1d1;
   border-left: 3px solid #007bff;
-  padding-left: 10px;
+  padding: 10px;
   z-index: 1050;
+  border-radius: 8px;
 }
 
 .dropdown:hover .dropdown-content {
@@ -332,11 +333,12 @@ body {
 
 .dropdown-content a {
   display: block;
-  padding: 10px;
+  padding: 4px;
   text-decoration: none;
   color: black;
   transition: background-color 0.3s ease, color 0.3s ease;
   background-color: #d1d1d1;
+  border-radius: 5px;
 }
 
 .dropdown-content a:hover {
@@ -352,6 +354,7 @@ body {
 .has-submenu:hover > a {
   background-color: #007bff;
   color: white;
+  border-radius: 5px;
 }
 
 .submenu {
@@ -359,10 +362,12 @@ body {
   position: absolute;
   top: 0;
   left: 100%;
-  min-width: 200px;
+  min-width: 350px;
   background-color: #e0e0e0;
   border-left: 3px solid #007bff;
   z-index: 9999;
+  border-radius: 8px;
+  padding-left: 10px;
 }
 
 .has-submenu:hover .submenu {
@@ -370,11 +375,12 @@ body {
 }
 
 .submenu a {
-  padding: 10px;
+  padding: 4px;
   display: block;
   background-color: #d8d8d8b7;
   color: black;
   text-decoration: none;
+  border-radius: 5px;
 }
 
 .submenu a:hover {

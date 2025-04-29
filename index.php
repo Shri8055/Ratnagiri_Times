@@ -138,9 +138,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       <button class="dropbtn action-button">Data Entry</button>
       <div class="dropdown-content">
         <a href="bills.php">Daily Bills</a>
+        <a href="bills.php">Multiple Ad's of one client</a>
         <a href="receipt.php">Receipts</a>
         <a href="debit.php">Debit Notes</a>
         <a href="credit.php">Credit Notes</a>
+        <a href="#">Adjust ON ACCOUNTED RECEIPTS</a>
+        <a href="#">Adjust ON ACCOUNTED CR.NOTES</a>
       </div>
     </div>
 
@@ -154,12 +157,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <a href="#">A/c Wise Bill</a>
             <a href="#">Particular A/c</a>
             <a href="#">Editionwise Billing</a>
+            <a href="#">District Billing</a>
+            <a href="#">Ad. typewise Billing</a>
+            <a href="#">Ratewise Billing</a>
+            <a href="#">Commission on Billing</a>
+            <a href="#">Pagewise Billing</a>
+            <a href="#">Representative Billing</a>
+            <a href="#">Representative Billing-Detailed</a>
           </div>
         </div>
         <a href="#">Monthly Reports</a>
         <a href="#">Outstanding Statements</a>
         <a href="ledger.php">Ledger</a>
-        <a href="#">Receipts, Credit & Debit Notes</a>
+        <a href="#">Abstract of A/c's</a>
+        <a href="#">Receipts</a>
+        <a href="#">Credit Notes</a>
+        <a href="#">Debit Notes</a>
+        <a href="#">Advitisements to Print</a>
+        <a href="#">Summery</a>
       </div>
     </div>
 
@@ -284,11 +299,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <td><input id="state-name" name="state-name" type="text" required></td>
                 </tr>
                 <tr>
-                    <td><label for="phone">Phone(O)<span style="color: red; font-size: 18px;">*</span>: </label></td>
+                    <td><label for="phone-o">Phone(O)<span style="color: red; font-size: 18px;">*</span>: </label></td>
                     <td><input id="phone-o" name="ph-no-o" placeholder="10 digits only" type="number" required></td>
-                    <td><label for="phone">Phone(P): </label></td>
+                    <td><label for="phone-p">Phone(P): </label></td>
                     <td><input id="phone-p" name="ph-no-p" placeholder="10 digits only" type="number"></td>
-                    <td><label for="phone">Phone(W): </label></td>
+                    <td><label for="phone-w">Phone(W): </label></td>
                     <td><input id="phone-w" name="ph-no-w" placeholder="10 digits only" type="number"></td>
                     <span id="ph-error-o" style="color: red; font-size: 14px;"></span>
                     <span id="ph-error-p" style="color: red; font-size: 14px;"></span>

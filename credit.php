@@ -121,32 +121,48 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           </div>
         </div>
         <div class="dropdown">
-          <button class="dropbtn action-button">Data Entry</button>
-          <div class="dropdown-content">
-            <a href="bills.php">Daily Bills</a>
-            <a href="receipt.php">Receipts</a>
-            <a href="debit.php">Debit Notes</a>
-            <a href="credit.php">Credit Notes</a>
+      <button class="dropbtn action-button">Data Entry</button>
+      <div class="dropdown-content">
+        <a href="bills.php">Daily Bills</a>
+        <a href="bills.php">Multiple Ad's of one client</a>
+        <a href="receipt.php">Receipts</a>
+        <a href="debit.php">Debit Notes</a>
+        <a href="credit.php">Credit Notes</a>
+        <a href="#">Adjust ON ACCOUNTED RECEIPTS</a>
+        <a href="#">Adjust ON ACCOUNTED CR.NOTES</a>
+      </div>
+    </div>
+
+    <div class="dropdown">
+      <button class="dropbtn action-button">Reports</button>
+      <div class="dropdown-content">
+        <div class="has-submenu">
+          <a href="#">Billing <span class="arw">▶</span></a>
+          <div class="submenu">
+            <a href="#">Daily Bill Summary</a>
+            <a href="#">A/c Wise Bill</a>
+            <a href="#">Particular A/c</a>
+            <a href="#">Editionwise Billing</a>
+            <a href="#">District Billing</a>
+            <a href="#">Ad. typewise Billing</a>
+            <a href="#">Ratewise Billing</a>
+            <a href="#">Commission on Billing</a>
+            <a href="#">Pagewise Billing</a>
+            <a href="#">Representative Billing</a>
+            <a href="#">Representative Billing-Detailed</a>
           </div>
         </div>
-        <div class="dropdown">
-          <button class="dropbtn action-button">Reports</button>
-          <div class="dropdown-content">
-            <div class="has-submenu">
-              <a href="#">Billing <span class="arw">▶</span></a>
-              <div class="submenu">
-                <a href="#">Daily Bill Summary</a>
-                <a href="#">A/c Wise Bill</a>
-                <a href="#">Particular A/c</a>
-                <a href="#">Editionwise Billing</a>
-              </div>
-            </div>
-            <a href="#">Monthly Reports</a>
-            <a href="#">Outstanding Statements</a>
-            <a href="ledger.php">Ledger</a>
-            <a href="#">Receipts, Credit & Debit Notes</a>
-          </div>
-        </div>
+        <a href="#">Monthly Reports</a>
+        <a href="#">Outstanding Statements</a>
+        <a href="ledger.php">Ledger</a>
+        <a href="#">Abstract of A/c's</a>
+        <a href="#">Receipts</a>
+        <a href="#">Credit Notes</a>
+        <a href="#">Debit Notes</a>
+        <a href="#">Advitisements to Print</a>
+        <a href="#">Summery</a>
+      </div>
+    </div>
         <div class="dropdown">
           <button class="dropbtn action-button">Print</button>
           <div class="dropdown-content">

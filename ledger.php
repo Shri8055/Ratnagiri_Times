@@ -85,9 +85,12 @@ td:nth-child(8),td:nth-child(9),th:nth-child(8),th:nth-child(9){text-align:end}
       <button class="dropbtn action-button">Data Entry</button>
       <div class="dropdown-content">
         <a href="bills.php">Daily Bills</a>
+        <a href="bills.php">Multiple Ad's of one client</a>
         <a href="receipt.php">Receipts</a>
         <a href="debit.php">Debit Notes</a>
         <a href="credit.php">Credit Notes</a>
+        <a href="#">Adjust ON ACCOUNTED RECEIPTS</a>
+        <a href="#">Adjust ON ACCOUNTED CR.NOTES</a>
       </div>
     </div>
 
@@ -101,12 +104,24 @@ td:nth-child(8),td:nth-child(9),th:nth-child(8),th:nth-child(9){text-align:end}
             <a href="#">A/c Wise Bill</a>
             <a href="#">Particular A/c</a>
             <a href="#">Editionwise Billing</a>
+            <a href="#">District Billing</a>
+            <a href="#">Ad. typewise Billing</a>
+            <a href="#">Ratewise Billing</a>
+            <a href="#">Commission on Billing</a>
+            <a href="#">Pagewise Billing</a>
+            <a href="#">Representative Billing</a>
+            <a href="#">Representative Billing-Detailed</a>
           </div>
         </div>
         <a href="#">Monthly Reports</a>
         <a href="#">Outstanding Statements</a>
         <a href="ledger.php">Ledger</a>
-        <a href="#">Receipts, Credit & Debit Notes</a>
+        <a href="#">Abstract of A/c's</a>
+        <a href="#">Receipts</a>
+        <a href="#">Credit Notes</a>
+        <a href="#">Debit Notes</a>
+        <a href="#">Advitisements to Print</a>
+        <a href="#">Summery</a>
       </div>
     </div>
 
@@ -149,7 +164,7 @@ td:nth-child(8),td:nth-child(9),th:nth-child(8),th:nth-child(9){text-align:end}
   <label>Type :
      <select name="l_type" onchange="document.getElementById('fltForm').submit()">
        <?php
-         $types=[''=>'All','Bill'=>'Bill','Receipt'=>'Receipt','Debit'=>'Debit','Credit'=>'Credit'];
+         $types=[''=>'All','BL'=>'BL','RC'=>'RC','DR'=>'DR','CR'=>'CR'];
          foreach($types as $v=>$t){
              $sel=(@$_GET['l_type']==$v)?'selected':'';
              echo "<option value='$v' $sel>$t</option>";
@@ -256,11 +271,12 @@ dt.on('draw', () =>{
    const rows = dt.rows({page:'current', search:'applied'}).nodes();
    if(balBox.dataset.locked!=='1'){                    
         if(rows.length===1){
-            const rd = rows[0].children[7].textContent.replace(/,/g,'')*1||0;
-            const rc = rows[0].children[8].textContent.replace(/,/g,'')*1||0;
-            balBox.value = (rc-rd).toFixed(2);
+          const balCell = rows[0].querySelector('.ledger-ac');
+          if (balCell && balCell.dataset.bal) {
+              balBox.value = balCell.dataset.bal;
+          }
         }else{
-            balBox.value = parseFloat(balBox.value)||0;
+          balBox.value = '0.00';
         }
    }
 });
